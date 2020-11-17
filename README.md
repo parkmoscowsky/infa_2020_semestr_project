@@ -1,0 +1,1 @@
+# infa_2020_idle_game_project
