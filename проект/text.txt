@@ -1,0 +1,5 @@
+hp_up = 0.0
+mana_up = 0.0
+jump_up = 0.0
+sp_up = 0.0
+global_point = 143.0
