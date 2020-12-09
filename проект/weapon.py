@@ -61,7 +61,7 @@ class Fire(pygame.sprite.Sprite):
                 
                 
 class Fireball(pygame.sprite.Sprite):
-    def __init__(self, player_x, player_y, mouse_x, mouse_y, blocksize, set_dic):
+    def __init__(self, player_x, player_y, mouse_x, mouse_y, blocksize, set_dic, damage_up):
         '''
         Конструктор класса Fireball.
 
@@ -80,6 +80,9 @@ class Fireball(pygame.sprite.Sprite):
         set_dic : type mapping
             Словарь со всеми основными переменными, 
             который импортируется из settings.
+        damage_up : type int
+            Улучшение урона фаирбола, которое
+            купил игрок в магазине.
 
         Returns None.
         -------
@@ -90,7 +93,7 @@ class Fireball(pygame.sprite.Sprite):
         '''
         self.width = 45
         self.height = 30
-        self.damage = 10
+        self.damage = 10 + damage_up
         self.speed = 10
         
         '''
