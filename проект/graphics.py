@@ -216,10 +216,10 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
             
-            t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее здоровье. Стоимость улучшения.', True, self.BLACK)
-            t_2 = f.render('Улучшение маны. +5 к мане. Текущая мана. Стоимость улучшения.', True, self.BLACK)
-            t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий урон. Стоимость улучшения.', True, self.BLACK)
-            t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая скорость. Стоимость улучшения.', True, self.BLACK)
+            t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп. здоровье ' + str(int(upgrade[0])) + '. Стоимость ' + str(int((upgrade[0]/5 + 1)*4)), True, self.BLACK)
+            t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + str(int(upgrade[1])) + '. Стоимость ' + str(int((upgrade[1]/5 + 1)*4)), True, self.BLACK)
+            t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп. урон ' + str(int(upgrade[2])) + '. Стоимость ' + str(int((upgrade[2]/2 + 1)*5)), True, self.BLACK)
+            t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп. скорость ' + str(int(upgrade[3])) + '. Стоимость ' + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
             self.screen.blit(t_1, (rect_1.right + 15, rect_1.center[1] - 5))
