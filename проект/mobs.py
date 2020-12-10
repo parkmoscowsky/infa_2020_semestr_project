@@ -91,4 +91,5 @@ class Mob(pygame.sprite.Sprite):
         if player_coordinate >= self.rect.right:
             self.rect.x += self.speedx
             self.timer()
-            self.image = pygame.transform.flip(self.mob_animation[self.frame], True, False)
+            self.image = pygame.transform.flip(self.mob_animation[self.frame],
+                                               True, False)

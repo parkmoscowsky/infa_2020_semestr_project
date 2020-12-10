@@ -26,7 +26,8 @@ class Fire(pygame.sprite.Sprite):
         self.width = 200
         self.height = 40
         self.fire_animation = []
-        set_sprite(self.fire_animation, 4, 'fire', set_dic['BLACK'], self.width, self.height)
+        set_sprite(self.fire_animation, 4, 'fire', set_dic['BLACK'], 
+                   self.width, self.height)
         self.image = self.fire_animation[0]
         self.rect = self.image.get_rect()
         self.rect.center = center
@@ -61,7 +62,8 @@ class Fire(pygame.sprite.Sprite):
                 
                 
 class Fireball(pygame.sprite.Sprite):
-    def __init__(self, player_x, player_y, mouse_x, mouse_y, blocksize, set_dic, damage_up):
+    def __init__(self, player_x, player_y, mouse_x, mouse_y, blocksize, 
+                 set_dic, damage_up):
         '''
         Конструктор класса Fireball.
 
@@ -110,13 +112,19 @@ class Fireball(pygame.sprite.Sprite):
         Поворачиваем спрайт на найденный угол.
         '''
         if mouse_x > player_x:
-            self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x))*180/math.pi
+            self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x))
+            *180/math.pi
         else:
-            self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x))*180/math.pi + 180
+            self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x))
+            *180/math.pi + 180
             
         self.fireball_animation = []                                                         
-        set_sprite(self.fireball_animation, 3, 'fireball', set_dic['BLACK'], self.width, self.height)
-        self.image = pygame.transform.rotate(self.fireball_animation[0], self.angle)
+        set_sprite(self.fireball_animation, 3, 'fireball', set_dic['BLACK'], 
+                   self.width, self.height)
+        
+        self.image = pygame.transform.rotate(self.fireball_animation[0], 
+                                             self.angle)
+        
         self.rect = self.image.get_rect()
         
         '''
@@ -137,5 +145,6 @@ class Fireball(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         if (self.rect.centerx - 0.45*self.width < self.blocksize) or (
-            self.rect.centerx + 0.45*self.width > set_dic['WIDTH'] - self.blocksize):
+            self.rect.centerx + 0.45*self.width > set_dic['WIDTH'] -
+            self.blocksize):
             self.kill()

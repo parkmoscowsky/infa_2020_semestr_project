@@ -33,11 +33,11 @@ def bar(coord_barx, coord_bary, bar_width, bar_height, back_color,
     Returns None.
     -------
     '''
-    pygame.draw.rect(set_dic['screen'], back_color, (coord_barx, coord_bary, 
-                                                     bar_width, bar_height))
-    pygame.draw.rect(set_dic['screen'], front_color, (coord_barx, coord_bary, 
-                                                      health * bar_width //maxhealth, 
-                                                      bar_height))
+    pygame.draw.rect(set_dic['screen'], back_color, 
+                     (coord_barx, coord_bary, bar_width, bar_height))
+    pygame.draw.rect(set_dic['screen'], front_color, 
+                     (coord_barx, coord_bary, 
+                      health * bar_width // maxhealth, bar_height))
     f = pygame.font.Font(None, 20)
     t = f.render(text + str(round(health)), True, (0, 0, 0))
     set_dic['screen'].blit(t, (coord_barx + bar_width, coord_bary))
@@ -75,7 +75,8 @@ class Menu(pygame.sprite.Sprite):
         Создаем список со всеми картинками для меню в нужном нам виде и месте.
         '''
         self.menu_sprite = []
-        set_sprite(self.menu_sprite, 3, 'menu', self.BLACK, self.WIDTH, self.HEIGHT)
+        set_sprite(self.menu_sprite, 3, 'menu', self.BLACK, 
+                   self.WIDTH, self.HEIGHT)
         self.image = self.menu_sprite[0]
         self.rect = self.image.get_rect()
         self.rect.x = 0
@@ -90,7 +91,6 @@ class Menu(pygame.sprite.Sprite):
         self.game_exit = False
 
         
-     
     def main_menu(self):
         '''
         Данный метод вызывает основное меню в начале игры 
@@ -131,6 +131,7 @@ class Menu(pygame.sprite.Sprite):
                         
             self.screen.blit(self.image, self.rect)
             pygame.display.flip()
+
 
     def paus_menu(self, upgrade):
         '''
@@ -177,10 +178,19 @@ class Menu(pygame.sprite.Sprite):
             pygame.display.flip()
 
 
-
     def shop_menu(self):
+        '''
+        Данный метод отвечает за работу меню shop.
+
+        Returns None.
+        -------
+        '''
         upgrade = self.load_data()
         
+        '''
+        Данная чать кода отвечает за настройку спрайтов, 
+        которые используются в магазине
+        '''
         self.image = self.menu_sprite[2]
         self.rect = self.image.get_rect() 
 
@@ -205,45 +215,83 @@ class Menu(pygame.sprite.Sprite):
         rect_4.y = 300
         
         t = True
+        
         while t:
-            
-            
+            '''
+            Здесь задается шрифт, стиль написания букв в магазине.
+            '''
             self.screen.blit(self.image, self.rect)
             f = pygame.font.Font(None, 26)
             
+            '''
+            Отрисовываем спрайты для улучшений.
+            '''
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
             
-            t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп. здоровье ' + str(int(upgrade[0])) + '. Стоимость ' + str(int((upgrade[0]/5 + 1)*4)), True, self.BLACK)
-            t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + str(int(upgrade[1])) + '. Стоимость ' + str(int((upgrade[1]/5 + 1)*4)), True, self.BLACK)
-            t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп. урон ' + str(int(upgrade[2])) + '. Стоимость ' + str(int((upgrade[2]/2 + 1)*5)), True, self.BLACK)
-            t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп. скорость ' + str(int(upgrade[3])) + '. Стоимость ' + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
+            '''
+            Создаем текст, который пишем около спрайтов.
+            '''
+            t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп.' 
+                           ' здоровье '+ str(int(upgrade[0])) + '. Стоимость '
+                           + str(int((upgrade[0]/5 + 1)*4)), True, self.BLACK)
+            
+            t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + 
+                           str(int(upgrade[1])) + '. Стоимость ' + 
+                           str(int((upgrade[1]/5 + 1)*4)), True, self.BLACK)
+            
+            t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп.'
+                           ' урон ' +str(int(upgrade[2])) + '. Стоимость ' +
+                           str(int((upgrade[2]/2 + 1)*5)), True, self.BLACK)
+            
+            t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп.'
+                           ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
+                           + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
+            
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
+            '''
+            Отрисовка текста.
+            '''
             self.screen.blit(t_1, (rect_1.right + 15, rect_1.center[1] - 5))
             self.screen.blit(t_2, (rect_2.right + 15, rect_2.center[1] - 5))
             self.screen.blit(t_3, (rect_3.right + 15, rect_3.center[1] - 5))
             self.screen.blit(t_4, (rect_4.right + 15, rect_4.center[1] - 5))
             self.screen.blit(t, (350, 20))
             
+            '''
+            Основной цикл, в котором происходит проверка нажатия на кнопки.
+            '''
             self.clock.tick(self.FPS)
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if (event.button == 1) and (rect_1.left < event.pos[0] < rect_1.right) and (rect_1.top < event.pos[1] < rect_1.bottom) and (upgrade[4] >= (upgrade[0]/5 + 1)*4):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    
+                    if  (rect_1.left < event.pos[0] < rect_1.right) and (
+                            rect_1.top < event.pos[1] < rect_1.bottom) and (
+                                upgrade[4] >= (upgrade[0]/5 + 1)*4):
                         upgrade[0] += 5
                         upgrade[4] -= (upgrade[0]/5) * 4
-                    if (event.button == 1) and (rect_2.left < event.pos[0] < rect_2.right) and (rect_2.top < event.pos[1] < rect_2.bottom) and (upgrade[4] >= (upgrade[1]/5 + 1)*4):
+                        
+                    if (rect_2.left < event.pos[0] < rect_2.right) and (
+                            rect_2.top < event.pos[1] < rect_2.bottom) and (
+                                upgrade[4] >= (upgrade[1]/5 + 1)*4):
                         upgrade[1] += 5
                         upgrade[4] -= (upgrade[1]/5) * 4
-                    if (event.button == 1) and (rect_3.left < event.pos[0] < rect_3.right) and (rect_3.top < event.pos[1] < rect_3.bottom) and (upgrade[4] >= (upgrade[2]/2 + 1)*5):
+                        
+                    if (rect_3.left < event.pos[0] < rect_3.right) and (
+                            rect_3.top < event.pos[1] < rect_3.bottom) and (
+                                upgrade[4] >= (upgrade[2]/2 + 1)*5):
                         upgrade[2] += 2
                         upgrade[4] -= (upgrade[2]/2) * 5
-                    if (event.button == 1) and (rect_4.left < event.pos[0] < rect_4.right) and (rect_4.top < event.pos[1] < rect_4.bottom) and (upgrade[4] >= (upgrade[3] + 1) * 20):
+                        
+                    if (rect_4.left < event.pos[0] < rect_4.right) and (
+                            rect_4.top < event.pos[1] < rect_4.bottom) and (
+                                upgrade[4] >= (upgrade[3] + 1) * 20):
                         upgrade[3] += 1
                         upgrade[4] -= upgrade[3] * 20
-                        print(upgrade[3] * 20)
+                        
                     self.save(upgrade)
                 
                 if event.type == pygame.KEYDOWN:
@@ -253,7 +301,7 @@ class Menu(pygame.sprite.Sprite):
                         t = False
             
             pygame.display.flip()        
-    
+
 
     def help_menu(self):
         '''
@@ -266,7 +314,8 @@ class Menu(pygame.sprite.Sprite):
         while t:
             self.screen.fill(self.WHITE)
             f = pygame.font.Font(None, 26)
-            t = f.render('Здесь должно что-то появиться потом ...', True, self.BLACK)
+            t = f.render('Здесь должно что-то появиться потом ...', 
+                         True, self.BLACK)
             self.screen.blit(t, (self.WIDTH/2, self.HEIGHT/2))
             self.clock.tick(self.FPS)
             for event in pygame.event.get():
@@ -275,7 +324,7 @@ class Menu(pygame.sprite.Sprite):
                         t = False
             pygame.display.flip()
             
-
+            
     def save(self, upgrade):
         '''
         Данный метод отвечает за сохранение данных в файл.
@@ -290,13 +339,14 @@ class Menu(pygame.sprite.Sprite):
         '''
         
         lines = ["hp_up = " + str(upgrade[0]),
-        "mana_up = " + str(upgrade[1]),
-        "damage_up = " + str(upgrade[2]),
-        "sp_up = " + str(upgrade[3]),
-        "global_point = " + str(upgrade[4])] 
+                 "mana_up = " + str(upgrade[1]),
+                 "damage_up = " + str(upgrade[2]),
+                 "sp_up = " + str(upgrade[3]),
+                 "global_point = " + str(upgrade[4])] 
         with open("text.txt", "w") as file:
             for  line in lines:
                 file.write(line + '\n')
+    
     
     def load_data(self):
         '''
@@ -319,7 +369,8 @@ class Menu(pygame.sprite.Sprite):
         while run:
             self.screen.blit(self.image, self.rect)
             f = pygame.font.Font(None, 26)
-            t1 = f.render('Вы умерли. Нажмите пробел, чтобы продолжить ...', True, self.BLACK)
+            t1 = f.render('Вы умерли. Нажмите пробел, чтобы продолжить ...', 
+                          True, self.BLACK)
             t2 = f.render('Ваш счёт ' + str(point), True, self.BLACK)
             self.screen.blit(t1, (self.WIDTH/4, self.HEIGHT/2))
             self.screen.blit(t2, (self.WIDTH/2, self.HEIGHT/3))

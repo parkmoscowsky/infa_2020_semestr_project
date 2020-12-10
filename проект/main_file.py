@@ -18,7 +18,8 @@ pygame.display.set_caption("Dungeon")
 img_dir = path.join(path.dirname(__file__), 'king')
 background = pygame.image.load(path.join(img_dir, 'test.png')).convert()
 background_rect = background.get_rect()
-background = pygame.transform.scale(background, (set_dic['WIDTH'], set_dic['HEIGHT'])) 
+background = pygame.transform.scale(background, 
+                                    (set_dic['WIDTH'], set_dic['HEIGHT'])) 
 
 
 pygame.mixer.music.load('background_music.wav')
@@ -26,6 +27,21 @@ sound = pygame.mixer.Sound('background_music.wav')
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, upgrade, set_dic):
+        '''
+        Конструктор класса Player.
+
+        Parameters
+        ----------
+        upgrade : type list
+            Задаёт улучшения, которые должен получать 
+            персонаж во время начала игры.
+        set_dic : type mapping
+            Словарь со всеми основными переменными, 
+            который импортируется из settings.
+
+        Returns None.
+        -------
+        '''
         pygame.sprite.Sprite.__init__(self)
         '''
         Задают размеры игрока, квадратного блока и количество спрайтов игрока.
@@ -36,7 +52,8 @@ class Player(pygame.sprite.Sprite):
         self.number = 8
         
         '''
-        Создаем список со всеми картинками для анимации игрока в нужном нам виде.
+        Создаем список со всеми картинками 
+        для анимации игрока в нужном нам виде.
         '''
         self.walk_animation = []
         set_sprite(self.walk_animation, self.number, 'wizard', 
@@ -138,7 +155,7 @@ class Player(pygame.sprite.Sprite):
             self.speedy -= self.gravity   
         
         if (keystate[pygame.K_SPACE]) and (self.rect.bottom >= 
-                                           set_dic['HEIGHT'] - self.blocksize) :
+                                           set_dic['HEIGHT'] - self.blocksize):
             self.speedy = self.speedjump
             
         if keystate[pygame.K_a]:
@@ -154,7 +171,8 @@ class Player(pygame.sprite.Sprite):
         if mouse_posx >= self.rect.x:
             self.image = self.walk_animation[self.frame]
         if mouse_posx < self.rect.x:
-            self.image = pygame.transform.flip(self.walk_animation[self.frame], True, False)
+            self.image = pygame.transform.flip(self.walk_animation[self.frame],
+                                               True, False)
         self.collision() 
 
             
@@ -173,13 +191,18 @@ class Player(pygame.sprite.Sprite):
         if self.weapon == 1:
             if self.mana >= self.fireball_cost:
                 self.mana -= self.fireball_cost
-                fireball = Fireball(self.rect.centerx, (self.rect.center[1] + self.rect.bottom)/2, 
-                                    mouse_pos[0], mouse_pos[1], self.blocksize, set_dic, upgrade[2])
+                fireball = Fireball(self.rect.centerx, 
+                                    (self.rect.center[1] + self.rect.bottom)/2,
+                                    mouse_pos[0], mouse_pos[1], self.blocksize,
+                                    set_dic, upgrade[2])
+                
                 fireballs_sprites.add(fireball) 
         if self.weapon == 2:
             if self.mana >= self.fire_cost:
                 self.mana -= self.fire_cost
-                fire = Fire((self.rect.center[0], self.rect.bottomright[1] - 22), set_dic)                 
+                fire = Fire((self.rect.center[0], 
+                             self.rect.bottomright[1] - 22), set_dic) 
+                
                 fires_sprites.add(fire)       
     
     
@@ -280,8 +303,10 @@ while not game_over:
     уменьшаем количество жизней игрока и оттталкиваем игрока.
     '''
     if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
-        if (player.rect.right >= mob.rect.left and player.rect.left <= mob.rect.right) or (
-                player.rect.left <= mob.rect.right and player.rect.right >= mob.rect.left):
+        if (player.rect.right >= mob.rect.left and player.rect.left <= 
+            mob.rect.right) or (player.rect.left <= mob.rect.right and 
+                                player.rect.right >= mob.rect.left):
+                                
             if player.rect.center[0] < mob.rect.center[0]:
                 player.rect.right = mob.rect.left - player.width    ###отталкивание
             else:
