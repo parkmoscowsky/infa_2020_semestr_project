@@ -188,6 +188,7 @@ class Player(pygame.sprite.Sprite):
 вск улучшения для героя, а также общее количество очков.
 '''      
 menu = Menu(set_dic)
+game_over = menu.main_menu()
 upgrade = menu.load_data()
 
 '''
@@ -216,7 +217,7 @@ mob_sprites.add(mob)
 Основная переменная, которая отвечает за запуск игрового цикла.
 Цикл работает, пока game_over == False.
 '''
-game_over = menu.main_menu()
+
 
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(1)
