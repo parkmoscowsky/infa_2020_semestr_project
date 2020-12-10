@@ -187,22 +187,22 @@ class Menu(pygame.sprite.Sprite):
         image_1 = self.upgrade_sprite[0]
         rect_1 = image_1.get_rect()
         rect_1.x = 10
-        rect_1.y = 50
+        rect_1.y = 90
         
         image_2 = self.upgrade_sprite[1]
         rect_2 = image_1.get_rect()
         rect_2.x = 10
-        rect_2.y = 120
+        rect_2.y = 160
         
         image_3 = self.upgrade_sprite[2]
         rect_3 = image_1.get_rect()
         rect_3.x = 10
-        rect_3.y = 190
+        rect_3.y = 230
         
         image_4 = self.upgrade_sprite[3]
         rect_4 = image_1.get_rect()
         rect_4.x = 10
-        rect_4.y = 260
+        rect_4.y = 300
         
         t = True
         while t:
@@ -220,30 +220,30 @@ class Menu(pygame.sprite.Sprite):
             t_2 = f.render('Улучшение маны. +5 к мане. Текущая мана. Стоимость улучшения.', True, self.BLACK)
             t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий урон. Стоимость улучшения.', True, self.BLACK)
             t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая скорость. Стоимость улучшения.', True, self.BLACK)
+            t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
             self.screen.blit(t_1, (rect_1.right + 15, rect_1.center[1] - 5))
             self.screen.blit(t_2, (rect_2.right + 15, rect_2.center[1] - 5))
             self.screen.blit(t_3, (rect_3.right + 15, rect_3.center[1] - 5))
             self.screen.blit(t_4, (rect_4.right + 15, rect_4.center[1] - 5))
+            self.screen.blit(t, (350, 20))
             
             self.clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if (event.button == 1) and (rect_1.left < event.pos[0] < rect_1.right) and (rect_1.top < event.pos[1] < rect_1.bottom):
-                        upgrade[4] -= 20
+                    if (event.button == 1) and (rect_1.left < event.pos[0] < rect_1.right) and (rect_1.top < event.pos[1] < rect_1.bottom) and (upgrade[4] >= (upgrade[0]/5 + 1)*4):
                         upgrade[0] += 5
-                        print('s')
-                    if (event.button == 1) and (rect_2.left < event.pos[0] < rect_2.right) and (rect_2.top < event.pos[1] < rect_2.bottom):
-                        upgrade[4] -= 20
+                        upgrade[4] -= (upgrade[0]/5) * 4
+                    if (event.button == 1) and (rect_2.left < event.pos[0] < rect_2.right) and (rect_2.top < event.pos[1] < rect_2.bottom) and (upgrade[4] >= (upgrade[1]/5 + 1)*4):
                         upgrade[1] += 5
-                    if (event.button == 1) and (rect_3.left < event.pos[0] < rect_3.right) and (rect_3.top < event.pos[1] < rect_3.bottom):
-                        upgrade[4] -= 20
+                        upgrade[4] -= (upgrade[1]/5) * 4
+                    if (event.button == 1) and (rect_3.left < event.pos[0] < rect_3.right) and (rect_3.top < event.pos[1] < rect_3.bottom) and (upgrade[4] >= (upgrade[2]/2 + 1)*5):
                         upgrade[2] += 2
-                    if (event.button == 1) and (rect_4.left < event.pos[0] < rect_4.right) and (rect_4.top < event.pos[1] < rect_4.bottom):
-                        print(upgrade[3])
-                        upgrade[4] -= 20
+                        upgrade[4] -= (upgrade[2]/2) * 5
+                    if (event.button == 1) and (rect_4.left < event.pos[0] < rect_4.right) and (rect_4.top < event.pos[1] < rect_4.bottom) and (upgrade[4] >= (upgrade[3] + 1) * 20):
                         upgrade[3] += 1
-                        print(upgrade[3])
+                        upgrade[4] -= upgrade[3] * 20
+                        print(upgrade[3] * 20)
                     self.save(upgrade)
                 
                 if event.type == pygame.KEYDOWN:
