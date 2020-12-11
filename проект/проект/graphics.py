@@ -1,6 +1,8 @@
 import pygame
+import time
 from settings import set_sprite
 from settings import set_dic
+from settings import snd_dic
 
 
 def bar(coord_barx, coord_bary, bar_width, bar_height, back_color, 
@@ -56,15 +58,12 @@ class Health(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = coord_x
         self.rect.bottom = coord_y
-
-
-
-
-
+        self.heal = 5
+        self.chance = 0.3
 
 
 class Menu(pygame.sprite.Sprite):
-    def __init__(self, set_dic):
+    def __init__(self, set_dic, snd_dic):
         '''
         Конструктор класса Menu.
 
@@ -91,6 +90,8 @@ class Menu(pygame.sprite.Sprite):
         self.clock = set_dic['clock']
         self.screen = set_dic['screen']
         
+        self.click_sound = snd_dic['click_sound']
+        
         '''
         Создаем список со всеми картинками для меню в нужном нам виде и месте.
         '''
@@ -103,7 +104,7 @@ class Menu(pygame.sprite.Sprite):
         self.rect.y = 0
         
         self.upgrade_sprite = []
-        set_sprite(self.upgrade_sprite, 4, 'upgrade', self.BLACK, 50, 50)
+        set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 50, 50)
         
         '''
         Переменная, отвечающая за выход из меню
@@ -125,27 +126,38 @@ class Menu(pygame.sprite.Sprite):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             80 < event.pos[1] < 130):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         self.shop_menu()
                         
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             150 < event.pos[1] < 200):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         self.help_menu()
                         
-                    
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             370 < event.pos[1] < 420):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
+                        self.click_sound.play()
+                        time.sleep(0.1)
                         self.game_exit = True
                         return(self.game_exit)
                         
@@ -174,22 +186,27 @@ class Menu(pygame.sprite.Sprite):
                         
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             150 < event.pos[1] < 200):
+                        self.click_sound.play()
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
+                        self.click_sound.play()
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
+                        self.click_sound.play()
                         self.help_menu()
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             370 < event.pos[1] < 420):
+                        self.click_sound.play()
                         self.save(upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
+                        self.click_sound.play()
                         self.save(upgrade)
                         self.game_exit = True
                         return(self.game_exit)
@@ -220,19 +237,24 @@ class Menu(pygame.sprite.Sprite):
         rect_1.y = 90
         
         image_2 = self.upgrade_sprite[1]
-        rect_2 = image_1.get_rect()
+        rect_2 = image_2.get_rect()
         rect_2.x = 10
         rect_2.y = 160
         
         image_3 = self.upgrade_sprite[2]
-        rect_3 = image_1.get_rect()
+        rect_3 = image_3.get_rect()
         rect_3.x = 10
         rect_3.y = 230
         
         image_4 = self.upgrade_sprite[3]
-        rect_4 = image_1.get_rect()
+        rect_4 = image_4.get_rect()
         rect_4.x = 10
         rect_4.y = 300
+        
+        image_5 = self.upgrade_sprite[4]
+        rect_5 = image_5.get_rect()
+        rect_5.x = 10
+        rect_5.y = 370
         
         t = True
         
@@ -250,6 +272,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(image_2, rect_2)
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
+            self.screen.blit(image_5, rect_5)
             
             '''
             Создаем текст, который пишем около спрайтов.
@@ -270,6 +293,9 @@ class Menu(pygame.sprite.Sprite):
                            ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
                            + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
             
+            t_5 = f.render('Новый навык. Будет добавлен в следующих' 
+                           ' версиях игры', True, self.BLACK)
+            
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
             '''
@@ -279,6 +305,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t_2, (rect_2.right + 15, rect_2.center[1] - 5))
             self.screen.blit(t_3, (rect_3.right + 15, rect_3.center[1] - 5))
             self.screen.blit(t_4, (rect_4.right + 15, rect_4.center[1] - 5))
+            self.screen.blit(t_5, (rect_5.right + 15, rect_5.center[1] - 5))
             self.screen.blit(t, (350, 20))
             
             '''

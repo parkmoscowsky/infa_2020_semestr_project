@@ -1,12 +1,15 @@
 import pygame
+import random
 from os import path
 from graphics import Menu
 from graphics import bar
 from graphics import Health
 from settings import set_sprite
 from settings import set_dic
+from settings import snd_dic
 from weapon import Fire, Fireball
 from mobs import Mob
+
 
 pygame.init()
 pygame.mixer.init()
@@ -22,13 +25,15 @@ background_rect = background.get_rect()
 background = pygame.transform.scale(background, 
                                     (set_dic['WIDTH'], set_dic['HEIGHT'])) 
 
-
-pygame.mixer.music.load('background_music.wav')
-sound = pygame.mixer.Sound('background_music.wav')
+'''
+загружаем музыку
+'''
+snd_dir = path.join(path.dirname(__file__), 'sound')
+pygame.mixer.music.load(path.join(snd_dir, 'background_music.wav'))
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, upgrade, set_dic):
+    def __init__(self, upgrade, set_dic, snd_dic):
         '''
         Конструктор класса Player.
 
@@ -88,6 +93,10 @@ class Player(pygame.sprite.Sprite):
         self.maxmana = 100 + upgrade[1]
         self.mana = self.maxmana  
         self.point = 0
+        
+        self.fire_sound = snd_dic['fire_sound']
+        self.fireball_sound = snd_dic['fireball_sound']
+        
         
         '''
         Переменные, отвечающие за частоту смены спрайтов игрока
@@ -199,16 +208,19 @@ class Player(pygame.sprite.Sprite):
                                     set_dic, upgrade[2])
                 
                 fireballs_sprites.add(fireball) 
+                self.fireball_sound.play()
         if self.weapon == 2:
             if self.mana >= self.fire_cost:
                 self.mana -= self.fire_cost
                 fire = Fire((self.rect.center[0], 
                              self.rect.bottomright[1] - 22), set_dic) 
                 
-                fires_sprites.add(fire)       
+                fires_sprites.add(fire)
+                self.fire_sound.play()
     
     
 global_game = False
+
 
 while not global_game: 
     
@@ -216,7 +228,7 @@ while not global_game:
     Создаем объект класса Menu и список upgrade, в котором находятся
     все улучшения для героя, а также общее количество очков.
     '''      
-    menu = Menu(set_dic)
+    menu = Menu(set_dic, snd_dic)
     game_over = menu.main_menu()
     global_game = game_over
     upgrade = menu.load_data()
@@ -231,12 +243,13 @@ while not global_game:
     health_sprites = pygame.sprite.Group()
     
     '''
-    Создаем объекты классов Player, Mob. Fireball, Fires.
+    Создаем объекты классов Player, Mob. Fireball, Fires, Health.
     '''
-    player = Player(upgrade, set_dic)
+    player = Player(upgrade, set_dic, snd_dic)
     mob = Mob(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
+    health = Health(set_dic, 1, 2)
     
     '''
     Добавляем объекты player и mob в соответствующие группы.
@@ -248,7 +261,7 @@ while not global_game:
     Запускаем музыку.
     '''
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.set_volume(0.3)
     
     while not game_over:
         
@@ -288,7 +301,11 @@ while not global_game:
         '''
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
            mob.health -= fire.damage
+           snd_dic['mob_sound'][random.randint(0, 5)].play()
            if mob.health <= 0:
+               if random.random() >= 1 - health.chance:
+                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                   health_sprites.add(health)
                mob.kill()
                player.point += 1
                upgrade[4] += 1
@@ -297,9 +314,11 @@ while not global_game:
         
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
            mob.health -= fireball.damage
+           snd_dic['mob_sound'][random.randint(0, 5)].play()
            if mob.health <= 0:
-               health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
-               health_sprites.add(health)
+               if random.random() >= 1 - health.chance:
+                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                   health_sprites.add(health)
                mob.kill()
                player.point += 1
                upgrade[4] += 1
@@ -311,6 +330,7 @@ while not global_game:
         уменьшаем количество жизней игрока и оттталкиваем игрока.
         '''
         if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
+            snd_dic['pain_sound'][random.randint(0,5)].play()
             if (player.rect.right >= mob.rect.left and player.rect.left <= 
                 mob.rect.right) or (player.rect.left <= mob.rect.right and 
                                     player.rect.right >= mob.rect.left):
@@ -321,6 +341,13 @@ while not global_game:
                     player.rect.left = mob.rect.right + player.width
                 player.health -= mob.damage   
                 
+        if pygame.sprite.groupcollide(health_sprites, player_sprites, False, False) and (player.health < player.maxhealth):
+            player.health += health.heal
+            snd_dic['heal'].play()
+            if player.health > player.maxhealth:
+                player.health = player.maxhealth
+            pygame.sprite.groupcollide(health_sprites, player_sprites, True, False)
+            
         '''
         Отрисовывает задний фон, полоску жизней и здоровья и все спрайты.
         Обновляет экран.
