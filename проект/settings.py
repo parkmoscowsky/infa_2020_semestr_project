@@ -42,7 +42,16 @@ snd_dir = path.join(path.dirname(__file__), 'sound')
 click_sound = pygame.mixer.Sound(path.join(snd_dir, 'click.wav'))
 fireball_sound = pygame.mixer.Sound(path.join(snd_dir, 'fireball.wav'))
 fire_sound = pygame.mixer.Sound(path.join(snd_dir, 'fire.wav'))
-mob_sound = pygame.mixer.Sound(path.join(snd_dir, 'mob.wav'))
+heal = pygame.mixer.Sound(path.join(snd_dir, 'heal.wav'))
+
+mob1 = pygame.mixer.Sound(path.join(snd_dir, 'mob1.wav'))
+mob2 = pygame.mixer.Sound(path.join(snd_dir, 'mob2.wav'))
+mob3 = pygame.mixer.Sound(path.join(snd_dir, 'mob3.wav'))
+mob4 = pygame.mixer.Sound(path.join(snd_dir, 'mob4.wav'))
+mob5 = pygame.mixer.Sound(path.join(snd_dir, 'mob5.wav'))
+mob6 = pygame.mixer.Sound(path.join(snd_dir, 'mob6.wav'))
+mob_sound = [mob1, mob2, mob3, mob4, mob5, mob6]
+
 pain1 = pygame.mixer.Sound(path.join(snd_dir, 'pain1.wav'))
 pain2 = pygame.mixer.Sound(path.join(snd_dir, 'pain2.wav'))
 pain3 = pygame.mixer.Sound(path.join(snd_dir, 'pain3.wav'))
@@ -51,8 +60,8 @@ pain5 = pygame.mixer.Sound(path.join(snd_dir, 'pain5.wav'))
 pain6 = pygame.mixer.Sound(path.join(snd_dir, 'pain6.wav'))
 pain_sound = [pain1, pain2, pain3, pain4, pain5, pain6]
 
-snd_dic = {'click_sound' : click_sound,'fireball_sound' : fireball_sound, 
-           'fire_sound' : fire_sound,'mob_sound' : mob_sound, 
+snd_dic = {'click_sound' : click_sound, 'fireball_sound' : fireball_sound, 
+           'fire_sound' : fire_sound, 'heal' : heal, 'mob_sound' : mob_sound, 
            'pain_sound' : pain_sound}
 
 

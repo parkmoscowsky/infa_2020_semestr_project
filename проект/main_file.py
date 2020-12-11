@@ -301,7 +301,7 @@ while not global_game:
         '''
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
            mob.health -= fire.damage
-           snd_dic['mob_sound'].play()
+           snd_dic['mob_sound'][random.randint(0, 5)].play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -314,7 +314,7 @@ while not global_game:
         
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
            mob.health -= fireball.damage
-           snd_dic['mob_sound'].play()
+           snd_dic['mob_sound'][random.randint(0, 5)].play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -343,6 +343,7 @@ while not global_game:
                 
         if pygame.sprite.groupcollide(health_sprites, player_sprites, False, False) and (player.health < player.maxhealth):
             player.health += health.heal
+            snd_dic['heal'].play()
             if player.health > player.maxhealth:
                 player.health = player.maxhealth
             pygame.sprite.groupcollide(health_sprites, player_sprites, True, False)
