@@ -6,6 +6,7 @@ from graphics import bar
 from graphics import Health
 from settings import set_sprite
 from settings import set_dic
+from settings import snd_dic
 from weapon import Fire, Fireball
 from mobs import Mob
 
@@ -29,19 +30,10 @@ background = pygame.transform.scale(background,
 '''
 snd_dir = path.join(path.dirname(__file__), 'sound')
 pygame.mixer.music.load(path.join(snd_dir, 'background_music.wav'))
-fireball_sound = pygame.mixer.Sound(path.join(snd_dir, 'fireball.wav'))
-fire_sound = pygame.mixer.Sound(path.join(snd_dir, 'fire.wav'))
-mob_sound = pygame.mixer.Sound(path.join(snd_dir, 'mob.wav'))
-pain1 = pygame.mixer.Sound(path.join(snd_dir, 'pain1.wav'))
-pain2 = pygame.mixer.Sound(path.join(snd_dir, 'pain2.wav'))
-pain3 = pygame.mixer.Sound(path.join(snd_dir, 'pain3.wav'))
-pain4 = pygame.mixer.Sound(path.join(snd_dir, 'pain4.wav'))
-pain5 = pygame.mixer.Sound(path.join(snd_dir, 'pain5.wav'))
-pain6 = pygame.mixer.Sound(path.join(snd_dir, 'pain6.wav'))
-pain_sound = [pain1, pain2, pain3, pain4, pain5, pain6]
+
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, upgrade, set_dic):
+    def __init__(self, upgrade, set_dic, snd_dic):
         '''
         Конструктор класса Player.
 
@@ -101,6 +93,10 @@ class Player(pygame.sprite.Sprite):
         self.maxmana = 100 + upgrade[1]
         self.mana = self.maxmana  
         self.point = 0
+        
+        self.fire_sound = snd_dic['fire_sound']
+        self.fireball_sound = snd_dic['fireball_sound']
+        
         
         '''
         Переменные, отвечающие за частоту смены спрайтов игрока
@@ -212,7 +208,7 @@ class Player(pygame.sprite.Sprite):
                                     set_dic, upgrade[2])
                 
                 fireballs_sprites.add(fireball) 
-                fireball_sound.play()
+                self.fireball_sound.play()
         if self.weapon == 2:
             if self.mana >= self.fire_cost:
                 self.mana -= self.fire_cost
@@ -220,7 +216,7 @@ class Player(pygame.sprite.Sprite):
                              self.rect.bottomright[1] - 22), set_dic) 
                 
                 fires_sprites.add(fire)
-                fire_sound.play()
+                self.fire_sound.play()
     
     
 global_game = False
@@ -232,7 +228,7 @@ while not global_game:
     Создаем объект класса Menu и список upgrade, в котором находятся
     все улучшения для героя, а также общее количество очков.
     '''      
-    menu = Menu(set_dic)
+    menu = Menu(set_dic, snd_dic)
     game_over = menu.main_menu()
     global_game = game_over
     upgrade = menu.load_data()
@@ -249,7 +245,7 @@ while not global_game:
     '''
     Создаем объекты классов Player, Mob. Fireball, Fires, Health.
     '''
-    player = Player(upgrade, set_dic)
+    player = Player(upgrade, set_dic, snd_dic)
     mob = Mob(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
@@ -305,7 +301,7 @@ while not global_game:
         '''
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
            mob.health -= fire.damage
-           mob_sound.play()
+           snd_dic['mob_sound'].play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -318,7 +314,7 @@ while not global_game:
         
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
            mob.health -= fireball.damage
-           mob_sound.play()
+           snd_dic['mob_sound'].play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -334,7 +330,7 @@ while not global_game:
         уменьшаем количество жизней игрока и оттталкиваем игрока.
         '''
         if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
-            pain_sound[random.randint(0,5)].play()
+            snd_dic['pain_sound'][random.randint(0,5)].play()
             if (player.rect.right >= mob.rect.left and player.rect.left <= 
                 mob.rect.right) or (player.rect.left <= mob.rect.right and 
                                     player.rect.right >= mob.rect.left):
