@@ -381,25 +381,4 @@ class Menu(pygame.sprite.Sprite):
                         self.image = self.menu_sprite[0]
                         self.rect = self.image.get_rect()
                         run = False
-            pygame.display.flip()  
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            pygame.display.flip()      

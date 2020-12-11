@@ -206,136 +206,139 @@ class Player(pygame.sprite.Sprite):
                 fires_sprites.add(fire)       
     
     
-''' 
-Создаем объект класса Menu и список upgrade, в котором находятся
-вск улучшения для героя, а также общее количество очков.
-'''      
-menu = Menu(set_dic)
-game_over = menu.main_menu()
-upgrade = menu.load_data()
+global_game = False
 
-'''
-Создаем группы для спрайтов, чтобы можно было проверять столкновения с ними.
-'''
-player_sprites = pygame.sprite.Group()
-mob_sprites = pygame.sprite.Group()                                                
-fireballs_sprites = pygame.sprite.Group()
-fires_sprites = pygame.sprite.Group()
-
-'''
-Создаем объекты классов Player, Mob. Fireball, Fires.
-'''
-player = Player(upgrade, set_dic)
-mob = Mob(set_dic)
-fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
-fire = Fire((1, 2), set_dic)
-
-'''
-Добавляем объекты player и mob в соответствующие группы.
-'''
-player_sprites.add(player)
-mob_sprites.add(mob)
-
-'''
-Основная переменная, которая отвечает за запуск игрового цикла.
-Цикл работает, пока game_over == False.
-'''
-
-
-pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(1)
-
-while not game_over:
+while not global_game: 
+    
+    ''' 
+    Создаем объект класса Menu и список upgrade, в котором находятся
+    все улучшения для героя, а также общее количество очков.
+    '''      
+    menu = Menu(set_dic)
+    game_over = menu.main_menu()
+    global_game = game_over
+    upgrade = menu.load_data()
     
     '''
-    Проверяет нажатие клавиш.
+    Создаем группы для спрайтов, чтобы можно было проверять столкновения с ними.
     '''
-    set_dic['clock'].tick(set_dic['FPS'])
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game_over = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                player.shoot(event.pos)
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
-                player.weapon = 1
-            if event.key == pygame.K_2:
-                player.weapon = 2
-            if event.key == pygame.K_ESCAPE:
-                pygame.mixer.music.stop()
-                game_over = menu.paus_menu(upgrade)
-                pygame.mixer.music.play(-1)
+    player_sprites = pygame.sprite.Group()
+    mob_sprites = pygame.sprite.Group()                                                
+    fireballs_sprites = pygame.sprite.Group()
+    fires_sprites = pygame.sprite.Group()
+    
+    '''
+    Создаем объекты классов Player, Mob. Fireball, Fires.
+    '''
+    player = Player(upgrade, set_dic)
+    mob = Mob(set_dic)
+    fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
+    fire = Fire((1, 2), set_dic)
+    
+    '''
+    Добавляем объекты player и mob в соответствующие группы.
+    '''
+    player_sprites.add(player)
+    mob_sprites.add(mob)
+    
+    '''
+    Запускаем музыку.
+    '''
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(1)
+    
+    while not game_over:
+        
+        '''
+        Проверяет нажатие клавиш.
+        '''
+        set_dic['clock'].tick(set_dic['FPS'])
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_over = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    player.shoot(event.pos)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    player.weapon = 1
+                if event.key == pygame.K_2:
+                    player.weapon = 2
+                if event.key == pygame.K_ESCAPE:
+                    pygame.mixer.music.stop()
+                    game_over = menu.paus_menu(upgrade)
+                    if game_over == False:
+                        pygame.mixer.music.play(-1)
+                    
+        '''
+        Обновляем координаты всех объектов.
+        '''             
+        player_sprites.update(pygame.mouse.get_pos()[0])    
+        mob_sprites.update(player.rect.x, player.width)
+        fireballs_sprites.update()
+        fires_sprites.update()
+    
+        '''
+        Проверяем столкновение спрайтов моба и огня/фаиербола.
+        Если количество жизней моба меньше 0, то он уничтожается,
+        при этом создается новый моб.
+        '''
+        if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
+           mob.health -= fire.damage
+           if mob.health <= 0:
+               mob.kill()
+               player.point += 1
+               upgrade[4] += 1
+               mob = Mob(set_dic)
+               mob_sprites.add(mob)
+        
+        if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
+           mob.health -= fireball.damage
+           if mob.health <= 0:
+               mob.kill()
+               player.point += 1
+               upgrade[4] += 1
+               mob = Mob(set_dic)
+               mob_sprites.add(mob)
+               
+        '''
+        Проверяем столкновение игрока с мобом, если они столкнулись, то
+        уменьшаем количество жизней игрока и оттталкиваем игрока.
+        '''
+        if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
+            if (player.rect.right >= mob.rect.left and player.rect.left <= 
+                mob.rect.right) or (player.rect.left <= mob.rect.right and 
+                                    player.rect.right >= mob.rect.left):
+                                    
+                if player.rect.center[0] < mob.rect.center[0]:
+                    player.rect.right = mob.rect.left - player.width    
+                else:
+                    player.rect.left = mob.rect.right + player.width
+                player.health -= mob.damage   
                 
-    '''
-    Обновляем координаты всех объектов.
-    '''             
-    player_sprites.update(pygame.mouse.get_pos()[0])    
-    mob_sprites.update(player.rect.x, player.width)
-    fireballs_sprites.update()
-    fires_sprites.update()
-
-    '''
-    Проверяем столкновение спрайтов моба и огня/фаиербола.
-    Если количество жизней моба меньше 0, то он уничтожается,
-    при этом создается новый моб.
-    '''
-    if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
-       mob.health -= fire.damage
-       if mob.health <= 0:
-           mob.kill()
-           player.point += 1
-           upgrade[4] += 1
-           mob = Mob(set_dic)
-           mob_sprites.add(mob)
-    
-    if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
-       mob.health -= fireball.damage
-       if mob.health <= 0:
-           mob.kill()
-           player.point += 1
-           upgrade[4] += 1
-           mob = Mob(set_dic)
-           mob_sprites.add(mob)
-           
-    '''
-    Проверяем столкновение игрока с мобом, если они столкнулись, то
-    уменьшаем количество жизней игрока и оттталкиваем игрока.
-    '''
-    if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
-        if (player.rect.right >= mob.rect.left and player.rect.left <= 
-            mob.rect.right) or (player.rect.left <= mob.rect.right and 
-                                player.rect.right >= mob.rect.left):
-                                
-            if player.rect.center[0] < mob.rect.center[0]:
-                player.rect.right = mob.rect.left - player.width    ###отталкивание
-            else:
-                player.rect.left = mob.rect.right + player.width
-            player.health -= mob.damage   
-            
-    '''
-    Отрисовывает задний фон, полоску жизней и здоровья и все спрайты.
-    Обновляет экран.
-    '''
-    set_dic['screen'].blit(background, background_rect)
-    bar(50, 40, 150, 20, set_dic['DARKRED'], set_dic['RED'], player.health,
-        player.maxhealth, 'health ')
-    bar(50, 70, 150, 20, set_dic['DARKBLUE'], set_dic['BLUE'], player.mana,
-        player.maxmana, 'mana ')
-    player_sprites.draw(set_dic['screen'])
-    mob_sprites.draw(set_dic['screen'])
-    fireballs_sprites.draw(set_dic['screen'])
-    fires_sprites.draw(set_dic['screen'])
-    pygame.display.flip()
-    
-    '''
-    Если у игрока кончились жизни, то игра завершается.
-    '''
-    if player.health <= 0:
-        menu.save(upgrade)
-        game_over = True
-        pygame.mixer.music.stop()
-        menu.death(player.point) 
+        '''
+        Отрисовывает задний фон, полоску жизней и здоровья и все спрайты.
+        Обновляет экран.
+        '''
+        set_dic['screen'].blit(background, background_rect)
+        bar(50, 40, 150, 20, set_dic['DARKRED'], set_dic['RED'], player.health,
+            player.maxhealth, 'health ')
+        bar(50, 70, 150, 20, set_dic['DARKBLUE'], set_dic['BLUE'], player.mana,
+            player.maxmana, 'mana ')
+        player_sprites.draw(set_dic['screen'])
+        mob_sprites.draw(set_dic['screen'])
+        fireballs_sprites.draw(set_dic['screen'])
+        fires_sprites.draw(set_dic['screen'])
+        pygame.display.flip()
+        
+        '''
+        Если у игрока кончились жизни, то игра завершается.
+        '''
+        if player.health <= 0:
+            menu.save(upgrade)
+            game_over = True
+            pygame.mixer.music.stop()
+            menu.death(player.point) 
 
 
 
