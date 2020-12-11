@@ -1,6 +1,13 @@
 import pygame
+import time
 from settings import set_sprite
 from settings import set_dic
+from os import path
+
+
+pygame.mixer.init()
+snd_dir = path.join(path.dirname(__file__), 'sound')
+click_sound = pygame.mixer.Sound(path.join(snd_dir, 'click.wav'))
 
 
 def bar(coord_barx, coord_bary, bar_width, bar_height, back_color, 
@@ -57,7 +64,7 @@ class Health(pygame.sprite.Sprite):
         self.rect.centerx = coord_x
         self.rect.bottom = coord_y
         self.heal = 5
-        self.chance = 0.9
+        self.chance = 0.3
 
 
 
@@ -126,27 +133,38 @@ class Menu(pygame.sprite.Sprite):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             80 < event.pos[1] < 130):
+                        click_sound.play()
+                        time.sleep(0.1)
                         self.shop_menu()
                         
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             150 < event.pos[1] < 200):
+                        click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
+                        click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
+                        click_sound.play()
+                        time.sleep(0.1)
                         self.help_menu()
                         
-                    
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             370 < event.pos[1] < 420):
+                        click_sound.play()
+                        time.sleep(0.1)
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
+                        click_sound.play()
+                        time.sleep(0.1)
                         self.game_exit = True
                         return(self.game_exit)
                         
@@ -175,22 +193,27 @@ class Menu(pygame.sprite.Sprite):
                         
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             150 < event.pos[1] < 200):
+                        click_sound.play()
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
+                        click_sound.play()
                         return(self.game_exit)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
+                        click_sound.play()
                         self.help_menu()
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             370 < event.pos[1] < 420):
+                        click_sound.play()
                         self.save(upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
+                        click_sound.play()
                         self.save(upgrade)
                         self.game_exit = True
                         return(self.game_exit)

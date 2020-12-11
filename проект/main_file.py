@@ -9,6 +9,7 @@ from settings import set_dic
 from weapon import Fire, Fireball
 from mobs import Mob
 
+
 pygame.init()
 pygame.mixer.init()
 

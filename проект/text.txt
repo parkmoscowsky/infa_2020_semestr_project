@@ -2,4 +2,4 @@ hp_up = 0.0
 mana_up = 0.0
 damage_up = 0.0
 sp_up = 0.0
-global_point = 173.0
+global_point = 175.0
