@@ -24,10 +24,21 @@ background_rect = background.get_rect()
 background = pygame.transform.scale(background, 
                                     (set_dic['WIDTH'], set_dic['HEIGHT'])) 
 
-
-pygame.mixer.music.load('background_music.wav')
-sound = pygame.mixer.Sound('background_music.wav')
-
+'''
+загружаем музыку
+'''
+snd_dir = path.join(path.dirname(__file__), 'sound')
+pygame.mixer.music.load(path.join(snd_dir, 'background_music.wav'))
+fireball_sound = pygame.mixer.Sound(path.join(snd_dir, 'fireball.wav'))
+fire_sound = pygame.mixer.Sound(path.join(snd_dir, 'fire.wav'))
+mob_sound = pygame.mixer.Sound(path.join(snd_dir, 'mob.wav'))
+pain1 = pygame.mixer.Sound(path.join(snd_dir, 'pain1.wav'))
+pain2 = pygame.mixer.Sound(path.join(snd_dir, 'pain2.wav'))
+pain3 = pygame.mixer.Sound(path.join(snd_dir, 'pain3.wav'))
+pain4 = pygame.mixer.Sound(path.join(snd_dir, 'pain4.wav'))
+pain5 = pygame.mixer.Sound(path.join(snd_dir, 'pain5.wav'))
+pain6 = pygame.mixer.Sound(path.join(snd_dir, 'pain6.wav'))
+pain_sound = [pain1, pain2, pain3, pain4, pain5, pain6]
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, upgrade, set_dic):
@@ -201,16 +212,19 @@ class Player(pygame.sprite.Sprite):
                                     set_dic, upgrade[2])
                 
                 fireballs_sprites.add(fireball) 
+                fireball_sound.play()
         if self.weapon == 2:
             if self.mana >= self.fire_cost:
                 self.mana -= self.fire_cost
                 fire = Fire((self.rect.center[0], 
                              self.rect.bottomright[1] - 22), set_dic) 
                 
-                fires_sprites.add(fire)       
+                fires_sprites.add(fire)
+                fire_sound.play()
     
     
 global_game = False
+
 
 while not global_game: 
     
@@ -251,7 +265,7 @@ while not global_game:
     Запускаем музыку.
     '''
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.set_volume(0.3)
     
     while not game_over:
         
@@ -291,6 +305,7 @@ while not global_game:
         '''
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
            mob.health -= fire.damage
+           mob_sound.play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -303,6 +318,7 @@ while not global_game:
         
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
            mob.health -= fireball.damage
+           mob_sound.play()
            if mob.health <= 0:
                if random.random() >= 1 - health.chance:
                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
@@ -318,6 +334,7 @@ while not global_game:
         уменьшаем количество жизней игрока и оттталкиваем игрока.
         '''
         if pygame.sprite.groupcollide(mob_sprites, player_sprites, False, False):
+            pain_sound[random.randint(0,5)].play()
             if (player.rect.right >= mob.rect.left and player.rect.left <= 
                 mob.rect.right) or (player.rect.left <= mob.rect.right and 
                                     player.rect.right >= mob.rect.left):
