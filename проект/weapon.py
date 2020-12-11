@@ -113,10 +113,10 @@ class Fireball(pygame.sprite.Sprite):
         '''
         if mouse_x > player_x:
             self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x)
-                                  )*180/math.pi
+                                   )*180/math.pi
         else:
             self.angle = math.atan((player_y - mouse_y)/(mouse_x - player_x)
-                                  )*180/math.pi + 180
+                                   )*180/math.pi + 180
             
         self.fireball_animation = []                                                         
         set_sprite(self.fireball_animation, 3, 'fireball', set_dic['BLACK'], 

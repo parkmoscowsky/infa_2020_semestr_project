@@ -1,10 +1,12 @@
 import pygame
+import random
 from os import path
 from graphics import Menu
+from graphics import bar
+from graphics import Health
 from settings import set_sprite
 from settings import set_dic
 from weapon import Fire, Fireball
-from graphics import bar
 from mobs import Mob
 
 pygame.init()
@@ -24,6 +26,7 @@ background = pygame.transform.scale(background,
 
 pygame.mixer.music.load('background_music.wav')
 sound = pygame.mixer.Sound('background_music.wav')
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, upgrade, set_dic):
@@ -226,14 +229,16 @@ while not global_game:
     mob_sprites = pygame.sprite.Group()                                                
     fireballs_sprites = pygame.sprite.Group()
     fires_sprites = pygame.sprite.Group()
+    health_sprites = pygame.sprite.Group()
     
     '''
-    Создаем объекты классов Player, Mob. Fireball, Fires.
+    Создаем объекты классов Player, Mob. Fireball, Fires, Health.
     '''
     player = Player(upgrade, set_dic)
     mob = Mob(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
+    health = Health(set_dic, 1, 2)
     
     '''
     Добавляем объекты player и mob в соответствующие группы.
@@ -286,6 +291,9 @@ while not global_game:
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
            mob.health -= fire.damage
            if mob.health <= 0:
+               if random.random() >= 1 - health.chance:
+                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                   health_sprites.add(health)
                mob.kill()
                player.point += 1
                upgrade[4] += 1
@@ -295,6 +303,9 @@ while not global_game:
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
            mob.health -= fireball.damage
            if mob.health <= 0:
+               if random.random() >= 1 - health.chance:
+                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                   health_sprites.add(health)
                mob.kill()
                player.point += 1
                upgrade[4] += 1
@@ -316,6 +327,12 @@ while not global_game:
                     player.rect.left = mob.rect.right + player.width
                 player.health -= mob.damage   
                 
+        if pygame.sprite.groupcollide(health_sprites, player_sprites, False, False) and (player.health < player.maxhealth):
+            player.health += health.heal
+            if player.health > player.maxhealth:
+                player.health = player.maxhealth
+            pygame.sprite.groupcollide(health_sprites, player_sprites, True, False)
+            
         '''
         Отрисовывает задний фон, полоску жизней и здоровья и все спрайты.
         Обновляет экран.
@@ -329,6 +346,8 @@ while not global_game:
         mob_sprites.draw(set_dic['screen'])
         fireballs_sprites.draw(set_dic['screen'])
         fires_sprites.draw(set_dic['screen'])
+        health_sprites.draw(set_dic['screen'])
+        
         pygame.display.flip()
         
         '''

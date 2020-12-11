@@ -93,3 +93,22 @@ class Mob(pygame.sprite.Sprite):
             self.timer()
             self.image = pygame.transform.flip(self.mob_animation[self.frame],
                                                True, False)
+            
+            
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            

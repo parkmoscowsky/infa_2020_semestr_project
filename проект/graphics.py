@@ -43,6 +43,27 @@ def bar(coord_barx, coord_bary, bar_width, bar_height, back_color,
     set_dic['screen'].blit(t, (coord_barx + bar_width, coord_bary))
 
 
+class Health(pygame.sprite.Sprite):
+    def __init__(self, set_dic, coord_x, coord_y):
+        pygame.sprite.Sprite.__init__(self)
+        self.width = 20
+        self.height = 20
+        self.health_sprite = []
+        set_sprite(self.health_sprite, 1, 'health', set_dic['BLACK'], 
+                   self.width, self.height)
+        
+        self.image = self.health_sprite[0]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = coord_x
+        self.rect.bottom = coord_y
+        self.heal = 5
+        self.chance = 0.9
+
+
+
+
+
+
 class Menu(pygame.sprite.Sprite):
     def __init__(self, set_dic):
         '''
