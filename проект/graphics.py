@@ -293,8 +293,10 @@ class Menu(pygame.sprite.Sprite):
                            ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
                            + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
             
-            t_5 = f.render('Новый навык. Будет добавлен в следующих' 
-                           ' версиях игры', True, self.BLACK)
+            if upgrade[5] == 0:
+                t_5 = f.render('Восстанавливающее оружие. Стоимость 300 очков' , True, self.BLACK)
+            else:
+                t_5 = f.render('У вас приобретен этот навык', True, self.BLACK)
             
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
@@ -338,6 +340,12 @@ class Menu(pygame.sprite.Sprite):
                                 upgrade[4] >= (upgrade[3] + 1) * 20):
                         upgrade[3] += 1
                         upgrade[4] -= upgrade[3] * 20
+                    
+                    if (rect_5.left < event.pos[0] < rect_5.right) and (
+                            rect_5. top < event.pos[1] < rect_5.bottom) and (
+                                upgrade[4] >= 300) and (upgrade[5] == 0):
+                        upgrade[5] = 1
+                        upgrade[4] -= 300
                         
                     self.save(upgrade)
                 

@@ -2,5 +2,5 @@ hp_up = 0.0
 mana_up = 0.0
 damage_up = 0.0
 sp_up = 0.0
-global_point = 241.0
-heal_weapon = 1.0
+global_point = 0.0
+heal_weapon = 1
