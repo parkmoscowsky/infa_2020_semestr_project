@@ -389,7 +389,8 @@ class Menu(pygame.sprite.Sprite):
                  "mana_up = " + str(upgrade[1]),
                  "damage_up = " + str(upgrade[2]),
                  "sp_up = " + str(upgrade[3]),
-                 "global_point = " + str(upgrade[4])] 
+                 "global_point = " + str(upgrade[4]),
+                 "heal_weapon = " + str(upgrade[5])] 
         with open("text.txt", "w") as file:
             for  line in lines:
                 file.write(line + '\n')

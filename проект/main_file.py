@@ -16,6 +16,7 @@ pygame.mixer.init()
 
 pygame.display.set_caption("Dungeon")
 
+
 '''
 Загружаем задний фон из папки с игрой и меняем его масштаб как нам нужно.
 '''
@@ -241,6 +242,9 @@ while not global_game:
     global_game = game_over
     upgrade = menu.load_data()
     
+    
+    heal_weapon = upgrade[5]
+    
     '''
     Создаем группы для спрайтов, чтобы можно было проверять столкновения с ними.
     '''
@@ -290,7 +294,7 @@ while not global_game:
                     player.weapon = 1
                 if event.key == pygame.K_2:
                     player.weapon = 2
-                if event.key == pygame.K_3:
+                if event.key == pygame.K_3 and heal_weapon:
                     player.weapon = 3
                 if event.key == pygame.K_ESCAPE:
                     pygame.mixer.music.stop()
