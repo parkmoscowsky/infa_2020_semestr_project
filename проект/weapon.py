@@ -36,6 +36,7 @@ class Fire(pygame.sprite.Sprite):
         self.frame_rate = 50  
         self.duration = 40
         self.damage = 0.2
+        self.cost = 30
         
         
     def update(self):
@@ -97,6 +98,7 @@ class Fireball(pygame.sprite.Sprite):
         self.height = 30
         self.damage = 10 + damage_up
         self.speed = 10
+        self.cost = 15
         
         '''
         Вычисляем скорость фаирбола по осям x и y в зависимости от того,
@@ -148,3 +150,20 @@ class Fireball(pygame.sprite.Sprite):
             self.rect.centerx + 0.45*self.width > set_dic['WIDTH'] -
             self.blocksize):
             self.kill()
+            
+            
+class Heal_fire(Fireball):
+    def __init__(self, player_x, player_y, mouse_x, mouse_y, blocksize, 
+                 set_dic, damage_up):
+        super().__init__(player_x, player_y, mouse_x, mouse_y, blocksize,
+                         set_dic, damage_up)
+        
+        
+        self.fireball_animation = []                                                         
+        set_sprite(self.fireball_animation, 1, 'heal_fire', set_dic['BLACK'], 
+                   self.width, self.height)
+        self.image = pygame.transform.rotate(self.fireball_animation[0], 
+                                             self.angle)
+        self.cost = 25
+        self.heal = 5
+        

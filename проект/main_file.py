@@ -7,7 +7,7 @@ from graphics import Health
 from settings import set_sprite
 from settings import set_dic
 from settings import snd_dic
-from weapon import Fire, Fireball
+from weapon import Fire, Fireball, Heal_fire
 from mobs import Mob
 
 
@@ -85,8 +85,7 @@ class Player(pygame.sprite.Sprite):
         Задаем стоимость по мане для огня/фаирбола, максимальное и 
         изначальное количество жизней, очков.
         '''
-        self.fireball_cost = 15
-        self.fire_cost = 30
+
         self.manaspeed = 0.1
         self.maxhealth = 100 + upgrade[0]
         self.health = self.maxhealth 
@@ -199,22 +198,22 @@ class Player(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
+        fireball = Fireball(self.rect.centerx, 
+                            (self.rect.center[1] + self.rect.bottom)/2, 
+                            mouse_pos[0], mouse_pos[1], 
+                            self.blocksize, set_dic, upgrade[2])
+        
+        fire = Fire((self.rect.center[0], self.rect.bottomright[1] - 22), 
+                    set_dic)
+        
         if self.weapon == 1:
-            if self.mana >= self.fireball_cost:
-                self.mana -= self.fireball_cost
-                fireball = Fireball(self.rect.centerx, 
-                                    (self.rect.center[1] + self.rect.bottom)/2,
-                                    mouse_pos[0], mouse_pos[1], self.blocksize,
-                                    set_dic, upgrade[2])
-                
+            if self.mana >= fireball.cost:
+                self.mana -= fireball.cost
                 fireballs_sprites.add(fireball) 
                 self.fireball_sound.play()
         if self.weapon == 2:
-            if self.mana >= self.fire_cost:
-                self.mana -= self.fire_cost
-                fire = Fire((self.rect.center[0], 
-                             self.rect.bottomright[1] - 22), set_dic) 
-                
+            if self.mana >= fire.cost:
+                self.mana -= fire.cost               
                 fires_sprites.add(fire)
                 self.fire_sound.play()
     
@@ -240,6 +239,7 @@ while not global_game:
     mob_sprites = pygame.sprite.Group()                                                
     fireballs_sprites = pygame.sprite.Group()
     fires_sprites = pygame.sprite.Group()
+    heal_fires = pygame.sprite.Group()
     health_sprites = pygame.sprite.Group()
     
     '''
@@ -249,6 +249,7 @@ while not global_game:
     mob = Mob(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
+    heal_fire = Heal_fire(1, 2, 3, 4, 5, set_dic, 0)
     health = Health(set_dic, 1, 2)
     
     '''

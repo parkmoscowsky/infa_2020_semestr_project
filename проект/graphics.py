@@ -104,7 +104,7 @@ class Menu(pygame.sprite.Sprite):
         self.rect.y = 0
         
         self.upgrade_sprite = []
-        set_sprite(self.upgrade_sprite, 4, 'upgrade', self.BLACK, 50, 50)
+        set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 50, 50)
         
         '''
         Переменная, отвечающая за выход из меню
@@ -237,19 +237,24 @@ class Menu(pygame.sprite.Sprite):
         rect_1.y = 90
         
         image_2 = self.upgrade_sprite[1]
-        rect_2 = image_1.get_rect()
+        rect_2 = image_2.get_rect()
         rect_2.x = 10
         rect_2.y = 160
         
         image_3 = self.upgrade_sprite[2]
-        rect_3 = image_1.get_rect()
+        rect_3 = image_3.get_rect()
         rect_3.x = 10
         rect_3.y = 230
         
         image_4 = self.upgrade_sprite[3]
-        rect_4 = image_1.get_rect()
+        rect_4 = image_4.get_rect()
         rect_4.x = 10
         rect_4.y = 300
+        
+        image_5 = self.upgrade_sprite[4]
+        rect_5 = image_5.get_rect()
+        rect_5.x = 10
+        rect_5.y = 370
         
         t = True
         
@@ -267,6 +272,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(image_2, rect_2)
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
+            self.screen.blit(image_5, rect_5)
             
             '''
             Создаем текст, который пишем около спрайтов.
@@ -287,6 +293,9 @@ class Menu(pygame.sprite.Sprite):
                            ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
                            + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
             
+            t_5 = f.render('Новый навык. Будет добавлен в следующих' 
+                           ' версиях игры', True, self.BLACK)
+            
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
             '''
@@ -296,6 +305,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t_2, (rect_2.right + 15, rect_2.center[1] - 5))
             self.screen.blit(t_3, (rect_3.right + 15, rect_3.center[1] - 5))
             self.screen.blit(t_4, (rect_4.right + 15, rect_4.center[1] - 5))
+            self.screen.blit(t_5, (rect_5.right + 15, rect_5.center[1] - 5))
             self.screen.blit(t, (350, 20))
             
             '''
