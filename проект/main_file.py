@@ -198,24 +198,33 @@ class Player(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
-        fireball = Fireball(self.rect.centerx, 
-                            (self.rect.center[1] + self.rect.bottom)/2, 
-                            mouse_pos[0], mouse_pos[1], 
-                            self.blocksize, set_dic, upgrade[2])
-        
-        fire = Fire((self.rect.center[0], self.rect.bottomright[1] - 22), 
-                    set_dic)
-        
         if self.weapon == 1:
+            fireball = Fireball(self.rect.centerx, 
+                                (self.rect.center[1] + self.rect.bottom)/2, 
+                                 mouse_pos[0], mouse_pos[1], 
+                                 self.blocksize, set_dic, upgrade[2])
             if self.mana >= fireball.cost:
                 self.mana -= fireball.cost
                 fireballs_sprites.add(fireball) 
                 self.fireball_sound.play()
+                
         if self.weapon == 2:
+            fire = Fire((self.rect.center[0], self.rect.bottomright[1] - 22), 
+                         set_dic)
             if self.mana >= fire.cost:
                 self.mana -= fire.cost               
                 fires_sprites.add(fire)
                 self.fire_sound.play()
+        
+        if self.weapon == 3:
+            heal_fire = Heal_fire(self.rect.centerx, 
+                                  (self.rect.center[1] + self.rect.bottom)/2, 
+                                  mouse_pos[0], mouse_pos[1], self.blocksize, 
+                                  set_dic, 0)
+            if self.mana >= heal_fire.cost:
+                self.mana -= heal_fire.cost
+                heal_fire_sprites.add(heal_fire)
+                self.fireball_sound.play()
     
     
 global_game = False
@@ -239,7 +248,7 @@ while not global_game:
     mob_sprites = pygame.sprite.Group()                                                
     fireballs_sprites = pygame.sprite.Group()
     fires_sprites = pygame.sprite.Group()
-    heal_fires = pygame.sprite.Group()
+    heal_fire_sprites = pygame.sprite.Group()
     health_sprites = pygame.sprite.Group()
     
     '''
@@ -281,6 +290,8 @@ while not global_game:
                     player.weapon = 1
                 if event.key == pygame.K_2:
                     player.weapon = 2
+                if event.key == pygame.K_3:
+                    player.weapon = 3
                 if event.key == pygame.K_ESCAPE:
                     pygame.mixer.music.stop()
                     game_over = menu.paus_menu(upgrade)
@@ -294,6 +305,7 @@ while not global_game:
         mob_sprites.update(player.rect.x, player.width)
         fireballs_sprites.update()
         fires_sprites.update()
+        heal_fire_sprites.update()
     
         '''
         Проверяем столкновение спрайтов моба и огня/фаиербола.
@@ -301,31 +313,50 @@ while not global_game:
         при этом создается новый моб.
         '''
         if pygame.sprite.groupcollide(mob_sprites, fires_sprites, False, False):
-           mob.health -= fire.damage
-           snd_dic['mob_sound'][random.randint(0, 5)].play()
-           if mob.health <= 0:
-               if random.random() >= 1 - health.chance:
-                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
-                   health_sprites.add(health)
-               mob.kill()
-               player.point += 1
-               upgrade[4] += 1
-               mob = Mob(set_dic)
-               mob_sprites.add(mob)
+            mob.health -= fire.damage
+            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            if mob.health <= 0:
+                if random.random() >= 1 - health.chance:
+                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                    health_sprites.add(health)
+                mob.kill()
+                player.point += 1
+                upgrade[4] += 1
+                mob = Mob(set_dic)
+                mob_sprites.add(mob)
         
         if pygame.sprite.groupcollide(mob_sprites, fireballs_sprites, False, True):
-           mob.health -= fireball.damage
-           snd_dic['mob_sound'][random.randint(0, 5)].play()
-           if mob.health <= 0:
-               if random.random() >= 1 - health.chance:
-                   health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
-                   health_sprites.add(health)
-               mob.kill()
-               player.point += 1
-               upgrade[4] += 1
-               mob = Mob(set_dic)
-               mob_sprites.add(mob)
+            mob.health -= fireball.damage
+            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            if mob.health <= 0:
+                if random.random() >= 1 - health.chance:
+                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                    health_sprites.add(health)
+                mob.kill()
+                player.point += 1
+                upgrade[4] += 1
+                mob = Mob(set_dic)
+                mob_sprites.add(mob)
                
+        if pygame.sprite.groupcollide(mob_sprites, heal_fire_sprites, False, True):
+            mob.health -= fireball.damage
+            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            if mob.health <= 0:
+                if random.random() >= 1 - health.chance:
+                    health = Health(set_dic, mob.rect.center[0], mob.rect.bottom)
+                    health_sprites.add(health)
+                mob.kill()
+                player.point += 1
+                upgrade[4] += 1
+                mob = Mob(set_dic)
+                mob_sprites.add(mob)
+             
+            if player.health < player.maxhealth:    
+                player.health += heal_fire.heal
+                snd_dic['heal'].play()
+                if player.health > player.maxhealth:
+                    player.health = player.maxhealth
+                
         '''
         Проверяем столкновение игрока с мобом, если они столкнулись, то
         уменьшаем количество жизней игрока и оттталкиваем игрока.
@@ -342,7 +373,9 @@ while not global_game:
                     player.rect.left = mob.rect.right + player.width
                 player.health -= mob.damage   
                 
-        if pygame.sprite.groupcollide(health_sprites, player_sprites, False, False) and (player.health < player.maxhealth):
+        if pygame.sprite.groupcollide(health_sprites, player_sprites, False, 
+                                      False) and (player.health < 
+                                                  player.maxhealth):
             player.health += health.heal
             snd_dic['heal'].play()
             if player.health > player.maxhealth:
@@ -362,6 +395,7 @@ while not global_game:
         mob_sprites.draw(set_dic['screen'])
         fireballs_sprites.draw(set_dic['screen'])
         fires_sprites.draw(set_dic['screen'])
+        heal_fire_sprites.draw(set_dic['screen'])
         health_sprites.draw(set_dic['screen'])
         
         pygame.display.flip()

@@ -158,12 +158,17 @@ class Heal_fire(Fireball):
         super().__init__(player_x, player_y, mouse_x, mouse_y, blocksize,
                          set_dic, damage_up)
         
+        self.width = 45
+        self.height = 30
+        self.damage = 10
+        self.speed = 10
+        self.cost = 25
+        self.heal = 5
         
         self.fireball_animation = []                                                         
         set_sprite(self.fireball_animation, 1, 'heal_fire', set_dic['BLACK'], 
                    self.width, self.height)
         self.image = pygame.transform.rotate(self.fireball_animation[0], 
                                              self.angle)
-        self.cost = 25
-        self.heal = 5
-        
+
+
