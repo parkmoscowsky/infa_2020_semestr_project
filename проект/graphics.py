@@ -259,6 +259,13 @@ class Menu(pygame.sprite.Sprite):
         t = True
         
         while t:
+            
+            hp_up_cost = (upgrade[0]/5 + 1)*4
+            mana_up_cost = (upgrade[1]/5 + 1)*4
+            damage_up_cost = (upgrade[2]/2 + 1)*5
+            speed_up_cost = (upgrade[3] + 1) * 20
+            heal_weapon_cost = 300
+            
             '''
             Здесь задается шрифт, стиль написания букв в магазине.
             '''
@@ -319,33 +326,37 @@ class Menu(pygame.sprite.Sprite):
                     
                     if  (rect_1.left < event.pos[0] < rect_1.right) and (
                             rect_1.top < event.pos[1] < rect_1.bottom) and (
-                                upgrade[4] >= (upgrade[0]/5 + 1)*4):
+                                upgrade[4] >= hp_up_cost) and (
+                                    upgrade[0] < 50):
+                        upgrade[4] -= hp_up_cost               
                         upgrade[0] += 5
-                        upgrade[4] -= (upgrade[0]/5) * 4
                         
                     if (rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom) and (
-                                upgrade[4] >= (upgrade[1]/5 + 1)*4):
+                                upgrade[4] >= mana_up_cost) and (
+                                    upgrade[1] < 50):
+                        upgrade[4] -= mana_up_cost
                         upgrade[1] += 5
-                        upgrade[4] -= (upgrade[1]/5) * 4
                         
                     if (rect_3.left < event.pos[0] < rect_3.right) and (
                             rect_3.top < event.pos[1] < rect_3.bottom) and (
-                                upgrade[4] >= (upgrade[2]/2 + 1)*5):
+                                upgrade[4] >= damage_up_cost) and (
+                                    upgrade[2] < 10):
+                        upgrade[4] -= damage_up_cost
                         upgrade[2] += 2
-                        upgrade[4] -= (upgrade[2]/2) * 5
                         
                     if (rect_4.left < event.pos[0] < rect_4.right) and (
                             rect_4.top < event.pos[1] < rect_4.bottom) and (
-                                upgrade[4] >= (upgrade[3] + 1) * 20):
+                                upgrade[4] >= speed_up_cost) and (
+                                    upgrade[3] < 5):
+                        upgrade[4] -= speed_up_cost
                         upgrade[3] += 1
-                        upgrade[4] -= upgrade[3] * 20
                     
                     if (rect_5.left < event.pos[0] < rect_5.right) and (
                             rect_5. top < event.pos[1] < rect_5.bottom) and (
                                 upgrade[4] >= 300) and (upgrade[5] == 0):
+                        upgrade[4] -= heal_weapon_cost
                         upgrade[5] = 1
-                        upgrade[4] -= 300
                         
                     self.save(upgrade)
                 
