@@ -284,21 +284,33 @@ class Menu(pygame.sprite.Sprite):
             '''
             Создаем текст, который пишем около спрайтов.
             '''
-            t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп.' 
-                           ' здоровье '+ str(int(upgrade[0])) + '. Стоимость '
-                           + str(int((upgrade[0]/5 + 1)*4)), True, self.BLACK)
+            if upgrade[0] < 50:
+                t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп.' 
+                               ' здоровье '+ str(int(upgrade[0])) + '. Стоимость '
+                               + str(int(hp_up_cost)), True, self.BLACK)
+            else:
+                t_1 = f.render('Здоровье max', True, self.BLACK)
             
-            t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + 
-                           str(int(upgrade[1])) + '. Стоимость ' + 
-                           str(int((upgrade[1]/5 + 1)*4)), True, self.BLACK)
+            if upgrade[1] < 50:
+                t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + 
+                               str(int(upgrade[1])) + '. Стоимость ' + 
+                               str(int(mana_up_cost)), True, self.BLACK)
+            else:
+                t_2 = f.render('Мана max', True, self.BLACK)
             
-            t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп.'
-                           ' урон ' +str(int(upgrade[2])) + '. Стоимость ' +
-                           str(int((upgrade[2]/2 + 1)*5)), True, self.BLACK)
-            
-            t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп.'
-                           ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
-                           + str(int((upgrade[3] + 1) * 20)), True, self.BLACK)
+            if upgrade[2] < 10:
+                t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп.'
+                               ' урон ' +str(int(upgrade[2])) + '. Стоимость ' +
+                               str(int(damage_up_cost)), True, self.BLACK)
+            else:
+                t_3 = f.render('Урон max', True, self.BLACK)
+                
+            if upgrade[3] < 5:
+                t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп.'
+                               ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
+                               + str(int(speed_up_cost)), True, self.BLACK)
+            else:
+                t_4 = f.render('Скорость max', True, self.BLACK)
             
             if upgrade[5] == 0:
                 t_5 = f.render('Восстанавливающее оружие. Стоимость 300 очков' , True, self.BLACK)
