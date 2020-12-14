@@ -1,6 +1,6 @@
-hp_up = 0
-mana_up = 0
-damage_up = 0
-sp_up = 0
-global_point = 2000
+hp_up = 10.0
+mana_up = 50.0
+damage_up = 2.0
+sp_up = 1.0
+global_point = 1766.0
 heal_weapon = 1.0
