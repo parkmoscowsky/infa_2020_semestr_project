@@ -24,33 +24,33 @@ class Player(pygame.sprite.Sprite):
         '''
         pygame.sprite.Sprite.__init__(self)
         
+        # Из словаря достаем размеры экрана, звуки огня и фаирбола.
+        self.WIDTH = set_dic['WIDTH']
+        self.HEIGHT = set_dic['HEIGHT']
+        self.fire_sound = snd_dic['fire_sound']
+        self.fireball_sound = snd_dic['fireball_sound']
         
-        self.upgrade = upgrade
-        
-        '''
-        Задают размеры игрока, квадратного блока и количество спрайтов игрока.
-        '''
+        # Задаем размеры и количество спрайтов игрока, 
+        # размеры квадратного блока.
         self.width = 60
         self.height = 85
-        self.blocksize = 37  
         self.number = 8
+        self.blocksize = 37  
         
-        '''
-        Создаем список со всеми картинками 
-        для анимации игрока в нужном нам виде.
-        '''
+        # Создаем список со всеми спрайтами для анимации игрока.
         self.walk_animation = []
         set_sprite(self.walk_animation, self.number, 'wizard', 
                    set_dic['BLACK'], self.width, self.height)             
         self.image = self.walk_animation[0]
-        self.rect = self.image.get_rect()       
+        self.rect = self.image.get_rect() 
         
-        '''
-        Задаем начальные координаты игрока, скорость перемещения и прыжка,
-        значение ускорения свободного падения и изначальный вид оружия.
-        '''
-        self.rect.centerx = set_dic['WIDTH'] / 4
-        self.rect.bottom = set_dic['HEIGHT'] - self.blocksize
+        # Создаем список с улучшениями для игрока
+        self.upgrade = upgrade
+        
+        # Задаем начальные координаты игрока, скорость перемещения и прыжка,
+        # значение ускорения свободного падения и изначальный вид оружия.
+        self.rect.centerx = self.WIDTH / 4
+        self.rect.bottom = self.HEIGHT - self.blocksize
         self.speedx = 0
         self.speedy = 0
         self.maxspeed = 4 + self.upgrade[3]
@@ -58,31 +58,22 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 2
         self.weapon = 1
         
-        '''
-        Задаем стоимость по мане для огня/фаирбола, максимальное и 
-        изначальное количество жизней, очков.
-        '''
-
+        # Задаем скорость восстановления маны стоимость по мане для
+        # огня/фаирбола, максимальное и изначальное количество жизней, очков.
         self.manaspeed = 0.1
         self.maxhealth = 100 + self.upgrade[0]
         self.health = self.maxhealth 
         self.maxmana = 100 + self.upgrade[1]
         self.mana = self.maxmana  
         self.point = 0
-        
-        self.fire_sound = snd_dic['fire_sound']
-        self.fireball_sound = snd_dic['fireball_sound']
-        
-        
+                
+        # Создаем группы для всех видов оружия.
         self.fireballs_sprites = pygame.sprite.Group()
         self.fires_sprites = pygame.sprite.Group()
         self.heal_fire_sprites = pygame.sprite.Group()
         
-        
-        '''
-        Переменные, отвечающие за частоту смены спрайтов игрока
-        во время движения.
-        '''
+        # Переменные, отвечающие за частоту смены спрайтов игрока
+        # во время движения.
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 45
@@ -114,16 +105,16 @@ class Player(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
-        if (self.rect.right > set_dic['WIDTH'] - self.blocksize) and (
-                self.rect.top < set_dic['HEIGHT']-(self.blocksize + self.height)):
-            self.rect.right = set_dic['WIDTH'] - self.blocksize
+        if (self.rect.right > self.WIDTH - self.blocksize) and (
+                self.rect.top < self.HEIGHT - (self.blocksize + self.height)):
+            self.rect.right = self.WIDTH - self.blocksize
         if (self.rect.left < self.blocksize) and (
-                self.rect.top < set_dic['HEIGHT']-(self.blocksize + self.height)):
+                self.rect.top < self.HEIGHT - (self.blocksize + self.height)):
             self.rect.left = self.blocksize
         if self.rect.top < self.blocksize:
             self.rect.top = self.blocksize
-        if self.rect.bottom > set_dic['HEIGHT'] - self.blocksize:
-            self.rect.bottom = set_dic['HEIGHT'] - self.blocksize
+        if self.rect.bottom > self.HEIGHT - self.blocksize:
+            self.rect.bottom = self.HEIGHT - self.blocksize
            
             
     def update(self, mouse_posx):
@@ -146,11 +137,11 @@ class Player(pygame.sprite.Sprite):
             self.mana += self.manaspeed
             
         if abs(self.speedy) <= self.speedjump: 
-            self.rect.y -= self.speedy                                                   #### Для двойного прыжка это не пойдет
+            self.rect.y -= self.speedy
             self.speedy -= self.gravity   
         
         if (keystate[pygame.K_SPACE]) and (self.rect.bottom >= 
-                                           set_dic['HEIGHT'] - self.blocksize):
+                                           self.HEIGHT - self.blocksize):
             self.speedy = self.speedjump
             
         if keystate[pygame.K_a]:
