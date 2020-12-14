@@ -134,7 +134,7 @@ class Menu(pygame.sprite.Sprite):
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
         
         # Переменная, отвечающая за громкость музыки.
-        self.volume = 0.5
+        self.volume = 50
         
         # Переменная, отвечающая за выход из меню
         self.game_exit = False
@@ -149,6 +149,8 @@ class Menu(pygame.sprite.Sprite):
         -------
         '''
         while True:
+            self.image = self.menu_sprite[0]
+            self.rect = self.image.get_rect()
             self.clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -167,8 +169,7 @@ class Menu(pygame.sprite.Sprite):
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
                         self.click_sound.play()
-                        time.sleep(0.1)
-                        return(self.game_exit)
+                        self.options()
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
@@ -415,15 +416,20 @@ class Menu(pygame.sprite.Sprite):
         self.image = self.menu_sprite[2]
         self.rect = self.image.get_rect()
         
+        f = pygame.font.Font(None, 26)
+        
         image_1 = self.options_sprite[0]
         rect_1 = image_1.get_rect()
-        rect_1.x = 10
-        rect_1.y = 300
+        rect_1.x = 20
+        rect_1.y = 50
         
         image_2 = pygame.transform.flip(self.options_sprite[0], True, True)
         rect_2 = image_2.get_rect()
-        rect_2.x = 10
-        rect_2.y = 360
+        rect_2.x = 20
+        rect_2.y = 110
+        
+        text_x = rect_1.right + 15
+        text_y = (rect_2.top + rect_1.bottom) / 2
         
         t = True
         
@@ -432,9 +438,9 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
-            f = pygame.font.Font(None, 26)
-            t = f.render('Здесь должно ', True, self.BLACK)
-            self.screen.blit(t, (self.WIDTH/2, self.HEIGHT/2))
+            
+            t = f.render('Громкость музыки ' + str(self.volume) + ' %', True, self.BLACK)
+            self.screen.blit(t, (text_x, text_y))
             self.clock.tick(self.FPS)
             
             for event in pygame.event.get():
