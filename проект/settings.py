@@ -1,16 +1,15 @@
 import pygame
 from os import path
 
-'''
-Задаем длину и высоту окна игры, частоту обновления экрана. 
-'''
+
+pygame.mixer.init()
+
+# Задаем длину и высоту окна игры, частоту обновления экрана. 
 WIDTH = 800
 HEIGHT = 600
 FPS = 60
 
-'''
-Объявляем основные цвета, которые используются во всей программе.
-'''
+# Объявляем основные цвета, которые используются во всей программе.
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -20,25 +19,22 @@ BLUE = (0, 0, 255)
 DARKBLUE = (24, 168, 173)
 YELLOW = (255, 255, 0)
 
-'''
-Создаем экран с заданными размерами и переменную, отвечающую за счет кадров. 
-'''
+# Создаем экран с заданными размерами и переменную, отвечающую за счет кадров. 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
-'''
-Создаем единый словарь из всех объявленных выше переменных, который будем 
-экспортировать во все остальные модули.
-'''
+# Создаем единый словарь из всех объявленных выше переменных, который будем 
+# экспортировать во все остальные модули.
 set_dic = {'WIDTH' : WIDTH, 'HEIGHT' : HEIGHT, 'FPS' : FPS, 'WHITE' : WHITE, 
            'BLACK' : BLACK, 'RED' : RED, 'DARKRED' : DARKRED, 'GREEN' : GREEN,
            'BLUE' : BLUE, 'DARKBLUE' : DARKBLUE,'YELLOW' : YELLOW, 
            'screen' : screen, 'clock' : clock}
 
-pygame.mixer.init()
-
+# Задаем папку, из которой будем брать все звуки.
 snd_dir = path.join(path.dirname(__file__), 'sound')
 
+# Далее из файла загружаются все основные звуки. 
+# Для удобства оним разбиты на блоки.
 click_sound = pygame.mixer.Sound(path.join(snd_dir, 'click.wav'))
 fireball_sound = pygame.mixer.Sound(path.join(snd_dir, 'fireball.wav'))
 fire_sound = pygame.mixer.Sound(path.join(snd_dir, 'fire.wav'))
@@ -60,6 +56,7 @@ pain5 = pygame.mixer.Sound(path.join(snd_dir, 'pain5.wav'))
 pain6 = pygame.mixer.Sound(path.join(snd_dir, 'pain6.wav'))
 pain_sound = [pain1, pain2, pain3, pain4, pain5, pain6]
 
+# Создаем словарь из звуков, который будем экспортировать в остальные модули.
 snd_dic = {'click_sound' : click_sound, 'fireball_sound' : fireball_sound, 
            'fire_sound' : fire_sound, 'heal' : heal, 'mob_sound' : mob_sound, 
            'pain_sound' : pain_sound}

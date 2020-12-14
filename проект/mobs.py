@@ -18,35 +18,28 @@ class Mob(pygame.sprite.Sprite):
         -------
         '''
         pygame.sprite.Sprite.__init__(self)
-        '''
-        Задаем размеры моба и количество спрайтов в его анимации.
-        '''
+        
+        # Задаем размеры моба и количество спрайтов в его анимации.
         self.width = 80
         self.height = 70
         self.number = 9
         
-        '''
-        Создаем список со всеми картинками анимации моба в нужном нам формате.
-        '''
+        # Создаем список со всеми картинками анимации моба.
         self.mob_animation = []
         set_sprite(self.mob_animation, self.number, 'slime', set_dic['BLACK'],
                    self.width, self.height)
         self.image = self.mob_animation[0]
         self.rect = self.image.get_rect()
         
-        '''
-        Задаем изначальные коорднаты моба, его скорость, здоровье и урон.
-        '''
+        # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
         self.rect.centerx = set_dic['WIDTH'] 
         self.rect.bottom = set_dic['HEIGHT'] - 37
         self.speedx = 2
         self.damage = 5
         self.health = 20
         
-        '''
-        Переменные, отвечающие за частоту смены спрайтов игрока
-        во время движения.
-        '''
+        # Переменные, отвечающие за частоту смены спрайтов игрока
+        # во время движения.
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 50 

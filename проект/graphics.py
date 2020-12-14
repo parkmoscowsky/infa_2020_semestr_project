@@ -4,6 +4,10 @@ from settings import set_sprite
 from settings import set_dic
 from settings import snd_dic
 
+# Достаем из словаря необходимые нам константы.
+screen = set_dic['screen']
+
+
 
 def bar(coord_barx, coord_bary, bar_width, bar_height, back_color, 
         front_color, health, maxhealth, text):
@@ -35,31 +39,54 @@ def bar(coord_barx, coord_bary, bar_width, bar_height, back_color,
     Returns None.
     -------
     '''
-    pygame.draw.rect(set_dic['screen'], back_color, 
+    pygame.draw.rect(screen, back_color, 
                      (coord_barx, coord_bary, bar_width, bar_height))
-    pygame.draw.rect(set_dic['screen'], front_color, 
+    pygame.draw.rect(screen, front_color, 
                      (coord_barx, coord_bary, 
                       health * bar_width // maxhealth, bar_height))
     f = pygame.font.Font(None, 20)
     t = f.render(text + str(round(health)), True, (0, 0, 0))
-    set_dic['screen'].blit(t, (coord_barx + bar_width, coord_bary))
+    screen.blit(t, (coord_barx + bar_width, coord_bary))
 
 
 class Health(pygame.sprite.Sprite):
     def __init__(self, set_dic, coord_x, coord_y):
+        '''
+        Конструктор класса Health.
+        
+        Parameters
+        ----------
+        set_dic : type mapping
+            Словарь со всеми основными переменными, 
+            который импортируется из settings.
+        coord_x : type
+            Координата смерти моба по оси x.
+        coord_y : type
+            Координата смерти моба по оси y.
+
+        Returns None.
+        -------
+        '''
         pygame.sprite.Sprite.__init__(self)
+        
+        # Достаем из словаря необходиымые константы.
+        self.BLACK = set_dic['BLACK']
+        
+        # Задаем размеры выпадающего сердечка, количество восстанавливаемых 
+        # им жизней и шанс его появления. 
         self.width = 20
         self.height = 20
-        self.health_sprite = []
-        set_sprite(self.health_sprite, 1, 'health', set_dic['BLACK'], 
-                   self.width, self.height)
+        self.heal = 5
+        self.chance = 0.3
         
+        # Устанавливаем спрайт сердечка на месте смерти моба.
+        self.health_sprite = []
+        set_sprite(self.health_sprite, 1, 'health', self.BLACK, 
+                   self.width, self.height)
         self.image = self.health_sprite[0]
         self.rect = self.image.get_rect()
         self.rect.centerx = coord_x
         self.rect.bottom = coord_y
-        self.heal = 5
-        self.chance = 0.3
 
 
 class Menu(pygame.sprite.Sprite):
@@ -77,9 +104,8 @@ class Menu(pygame.sprite.Sprite):
         -------
         '''
         pygame.sprite.Sprite.__init__(self)
-        '''
-        Извлекаем нужные нам переменные из словаря.
-        '''
+        
+        # Извлекаем нужные нам переменные из словарей.
         self.WIDTH = set_dic['WIDTH']
         self.HEIGHT = set_dic['HEIGHT']
         self.BLACK = set_dic['BLACK']
@@ -89,12 +115,9 @@ class Menu(pygame.sprite.Sprite):
         self.FPS = set_dic['FPS']
         self.clock = set_dic['clock']
         self.screen = set_dic['screen']
-        
         self.click_sound = snd_dic['click_sound']
         
-        '''
-        Создаем список со всеми картинками для меню в нужном нам виде и месте.
-        '''
+        # Создаем список со всеми картинками для меню.
         self.menu_sprite = []
         set_sprite(self.menu_sprite, 3, 'menu', self.BLACK, 
                    self.WIDTH, self.HEIGHT)
@@ -106,9 +129,7 @@ class Menu(pygame.sprite.Sprite):
         self.upgrade_sprite = []
         set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 50, 50)
         
-        '''
-        Переменная, отвечающая за выход из меню
-        '''
+        # Переменная, отвечающая за выход из меню
         self.game_exit = False
 
         
@@ -222,12 +243,10 @@ class Menu(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
+        # Создаем список со всеми улучшениями.
         upgrade = self.load_data()
         
-        '''
-        Данная чать кода отвечает за настройку спрайтов, 
-        которые используются в магазине
-        '''
+        # Настраиваем расположение всех спрайтов, используемых в магазине.
         self.image = self.menu_sprite[2]
         self.rect = self.image.get_rect() 
 
@@ -256,72 +275,72 @@ class Menu(pygame.sprite.Sprite):
         rect_5.x = 10
         rect_5.y = 370
         
+        # Переменная, отвечающая за то, что игрок находится в магазине.
         t = True
         
         while t:
             
+            # Устанавливаем стоимость каждого улучшения в магазине.
             hp_up_cost = (upgrade[0]/5 + 1)*4
             mana_up_cost = (upgrade[1]/5 + 1)*4
             damage_up_cost = (upgrade[2]/2 + 1)*5
             speed_up_cost = (upgrade[3] + 1) * 20
             heal_weapon_cost = 300
             
-            '''
-            Здесь задается шрифт, стиль написания букв в магазине.
-            '''
+            # Здесь задается шрифт, стиль написания букв в магазине.
             self.screen.blit(self.image, self.rect)
             f = pygame.font.Font(None, 26)
             
-            '''
-            Отрисовываем спрайты для улучшений.
-            '''
+            # Отрисовываем спрайты улучшений.
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
             self.screen.blit(image_5, rect_5)
             
-            '''
-            Создаем текст, который пишем около спрайтов.
-            '''
+            # Создаем текст, который пишем около спрайтов.
+            # Если у игрока куплено максимальное улучшение, 
+            # то выводим ему сообщение об этом.
             if upgrade[0] < 50:
-                t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее доп.' 
-                               ' здоровье '+ str(int(upgrade[0])) + '. Стоимость '
-                               + str(int(hp_up_cost)), True, self.BLACK)
+                t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее ' 
+                               'доп. здоровье '+ str(int(upgrade[0])) + 
+                               '. Стоимость '+ str(int(hp_up_cost)), True, 
+                               self.BLACK)
             else:
                 t_1 = f.render('Здоровье max', True, self.BLACK)
             
             if upgrade[1] < 50:
-                t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана ' + 
-                               str(int(upgrade[1])) + '. Стоимость ' + 
+                t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана '
+                               + str(int(upgrade[1])) + '. Стоимость ' + 
                                str(int(mana_up_cost)), True, self.BLACK)
             else:
                 t_2 = f.render('Мана max', True, self.BLACK)
             
             if upgrade[2] < 10:
-                t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий доп.'
-                               ' урон ' +str(int(upgrade[2])) + '. Стоимость ' +
-                               str(int(damage_up_cost)), True, self.BLACK)
+                t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий'
+                               ' доп. урон ' +str(int(upgrade[2])) + 
+                               '. Стоимость ' +str(int(damage_up_cost)), 
+                               True, self.BLACK)
             else:
                 t_3 = f.render('Урон max', True, self.BLACK)
                 
             if upgrade[3] < 5:
-                t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая доп.'
-                               ' скорость ' + str(int(upgrade[3])) + '. Стоимость '
-                               + str(int(speed_up_cost)), True, self.BLACK)
+                t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая' 
+                               ' доп. скорость ' + str(int(upgrade[3])) + 
+                               '. Стоимость '+ str(int(speed_up_cost)), True, 
+                               self.BLACK)
             else:
                 t_4 = f.render('Скорость max', True, self.BLACK)
             
             if upgrade[5] == 0:
-                t_5 = f.render('Восстанавливающее оружие. Стоимость 300 очков' , True, self.BLACK)
+                t_5 = f.render('Восстанавливающее оружие. Стоимость 300 очков'
+                               , True, self.BLACK)
             else:
                 t_5 = f.render('У вас приобретен этот навык', True, self.BLACK)
             
             t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
             
-            '''
-            Отрисовка текста.
-            '''
+            # Отрисовка текста.
             self.screen.blit(t_1, (rect_1.right + 15, rect_1.center[1] - 5))
             self.screen.blit(t_2, (rect_2.right + 15, rect_2.center[1] - 5))
             self.screen.blit(t_3, (rect_3.right + 15, rect_3.center[1] - 5))
@@ -329,9 +348,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t_5, (rect_5.right + 15, rect_5.center[1] - 5))
             self.screen.blit(t, (350, 20))
             
-            '''
-            Основной цикл, в котором происходит проверка нажатия на кнопки.
-            '''
+            # Основной цикл, в котором происходит проверка нажатия на кнопки.
             self.clock.tick(self.FPS)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -442,10 +459,29 @@ class Menu(pygame.sprite.Sprite):
     
     
     def death(self, point):
+        '''
+        Данный метод отвечает за то, что после смерти игрока ему выводится
+        сообщение о том, что он умер, а также количество его очков.
+
+        Parameters
+        ----------
+        point : type int
+            Количество заработанных за игру очков.
+
+        Returns None.
+        -------
+        '''
+        # Устанавливаем нужный фон.
         self.image = self.menu_sprite[2]
-        self.rect = self.image.get_rect()        
+        self.rect = self.image.get_rect() 
+        
+        # Переменная, отвечающая за то, что игроку показывается сообщение.
+        # Когда она принимает значение False, сообщение пропадает и ирок 
+        # переносится в основное меню.
         run = True
+        
         while run:
+            # Выводим игроку текстовое сообщение.
             self.screen.blit(self.image, self.rect)
             f = pygame.font.Font(None, 26)
             t1 = f.render('Вы умерли. Нажмите пробел, чтобы продолжить ...', 
@@ -454,10 +490,13 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t1, (self.WIDTH/4, self.HEIGHT/2))
             self.screen.blit(t2, (self.WIDTH/2, self.HEIGHT/3))
             self.clock.tick(self.FPS)
+            
+            # Проверка нажатия клавиши space.
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.image = self.menu_sprite[0]
                         self.rect = self.image.get_rect()
                         run = False
+                        
             pygame.display.flip()      
