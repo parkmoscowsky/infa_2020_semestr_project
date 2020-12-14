@@ -116,6 +116,7 @@ class Menu(pygame.sprite.Sprite):
         self.clock = set_dic['clock']
         self.screen = set_dic['screen']
         self.click_sound = snd_dic['click_sound']
+        self.buy_sound = snd_dic['buy_sound']
         
         # Создаем список со всеми картинками для меню.
         self.menu_sprite = []
@@ -359,6 +360,7 @@ class Menu(pygame.sprite.Sprite):
                                     upgrade[0] < 50):
                         upgrade[4] -= hp_up_cost               
                         upgrade[0] += 5
+                        self.buy_sound.play()
                         
                     if (rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom) and (
@@ -366,6 +368,7 @@ class Menu(pygame.sprite.Sprite):
                                     upgrade[1] < 50):
                         upgrade[4] -= mana_up_cost
                         upgrade[1] += 5
+                        self.buy_sound.play()
                         
                     if (rect_3.left < event.pos[0] < rect_3.right) and (
                             rect_3.top < event.pos[1] < rect_3.bottom) and (
@@ -373,6 +376,7 @@ class Menu(pygame.sprite.Sprite):
                                     upgrade[2] < 10):
                         upgrade[4] -= damage_up_cost
                         upgrade[2] += 2
+                        self.buy_sound.play()
                         
                     if (rect_4.left < event.pos[0] < rect_4.right) and (
                             rect_4.top < event.pos[1] < rect_4.bottom) and (
@@ -380,12 +384,14 @@ class Menu(pygame.sprite.Sprite):
                                     upgrade[3] < 5):
                         upgrade[4] -= speed_up_cost
                         upgrade[3] += 1
+                        self.buy_sound.play()
                     
                     if (rect_5.left < event.pos[0] < rect_5.right) and (
                             rect_5. top < event.pos[1] < rect_5.bottom) and (
                                 upgrade[4] >= 300) and (upgrade[5] == 0):
                         upgrade[4] -= heal_weapon_cost
                         upgrade[5] = 1
+                        self.buy_sound.play()
                         
                     self.save(upgrade)
                 

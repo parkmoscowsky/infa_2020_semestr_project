@@ -39,6 +39,7 @@ click_sound = pygame.mixer.Sound(path.join(snd_dir, 'click.wav'))
 fireball_sound = pygame.mixer.Sound(path.join(snd_dir, 'fireball.wav'))
 fire_sound = pygame.mixer.Sound(path.join(snd_dir, 'fire.wav'))
 heal = pygame.mixer.Sound(path.join(snd_dir, 'heal.wav'))
+buy_sound = pygame.mixer.Sound(path.join(snd_dir, 'buy_upgrade.wav'))
 
 mob1 = pygame.mixer.Sound(path.join(snd_dir, 'mob1.wav'))
 mob2 = pygame.mixer.Sound(path.join(snd_dir, 'mob2.wav'))
@@ -58,8 +59,8 @@ pain_sound = [pain1, pain2, pain3, pain4, pain5, pain6]
 
 # Создаем словарь из звуков, который будем экспортировать в остальные модули.
 snd_dic = {'click_sound' : click_sound, 'fireball_sound' : fireball_sound, 
-           'fire_sound' : fire_sound, 'heal' : heal, 'mob_sound' : mob_sound, 
-           'pain_sound' : pain_sound}
+           'fire_sound' : fire_sound, 'heal' : heal, 'buy_sound' : buy_sound, 
+           'mob_sound' : mob_sound, 'pain_sound' : pain_sound}
 
 
 def set_sprite(sprite_list, number, name, color, width, height):
