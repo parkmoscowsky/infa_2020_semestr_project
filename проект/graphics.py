@@ -134,7 +134,7 @@ class Menu(pygame.sprite.Sprite):
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
         
         # Переменная, отвечающая за громкость музыки.
-        self.volume = 50
+        self.volume = int(self.load_data()[6])
         
         # Переменная, отвечающая за выход из меню
         self.game_exit = False
@@ -222,6 +222,8 @@ class Menu(pygame.sprite.Sprite):
                             230 < event.pos[1] < 280):
                         self.click_sound.play()
                         self.options()
+                        upgrade[6] = self.volume
+                        self.save(upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
@@ -428,31 +430,39 @@ class Menu(pygame.sprite.Sprite):
         rect_2.x = 20
         rect_2.y = 110
         
-        text_x = rect_1.right + 15
-        text_y = (rect_2.top + rect_1.bottom) / 2
+        text1_x = 10
+        text1_y = 10
+        text2_x = rect_1.right + 15
+        text2_y = (rect_2.top + rect_1.bottom) / 2
         
-        t = True
+        run = True
         
-        while t:
+        while run:
             
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
-            
-            t = f.render('Громкость музыки ' + str(self.volume) + ' %', True, self.BLACK)
-            self.screen.blit(t, (text_x, text_y))
+            t_1 = f.render('Изменение громкости музыки', True, self.BLACK)
+            t_2 = f.render('Громкость музыки ' + str(self.volume) + 
+                         ' %', True, self.BLACK)
+            self.screen.blit(t_1, (text1_x, text1_y))
+            self.screen.blit(t_2, (text2_x, text2_y))
             self.clock.tick(self.FPS)
             
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     
-                    if (event.button == 1) and (rect_1.left < event.pos[0] < rect_1.right) and (rect_1.top < event.pos[1] < rect_1.bottom):
+                    if (event.button == 1) and (
+                        rect_1.left < event.pos[0] < rect_1.right) and (
+                        rect_1.top < event.pos[1] < rect_1.bottom):
                         self.click_sound.play()
                         self.volume += 5
                         if self.volume > 100:
                             self.volume = 100
                             
-                    if (event.button == 1) and (rect_2.left < event.pos[0] < rect_2.right) and (rect_2.top < event.pos[1] < rect_2.bottom):
+                    if (event.button == 1) and (
+                        rect_2.left < event.pos[0] < rect_2.right) and (
+                            rect_2.top < event.pos[1] < rect_2.bottom):
                         self.click_sound.play()
                         self.volume -= 5
                         if self.volume < 0:
@@ -460,10 +470,9 @@ class Menu(pygame.sprite.Sprite):
                             
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        t = False
+                        run = False
                         
             pygame.display.flip()
-        
 
     def help_menu(self):
         '''
@@ -505,7 +514,8 @@ class Menu(pygame.sprite.Sprite):
                  "damage_up = " + str(upgrade[2]),
                  "sp_up = " + str(upgrade[3]),
                  "global_point = " + str(upgrade[4]),
-                 "heal_weapon = " + str(upgrade[5])] 
+                 "heal_weapon = " + str(upgrade[5]),
+                 "music_volume = " + str(upgrade[6])] 
         with open("text.txt", "w") as file:
             for  line in lines:
                 file.write(line + '\n')

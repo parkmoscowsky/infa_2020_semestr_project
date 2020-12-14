@@ -1,6 +1,7 @@
-hp_up = 0.0
+hp_up = 5.0
 mana_up = 0.0
 damage_up = 0.0
 sp_up = 0.0
-global_point = 2024.0
+global_point = 2039.0
 heal_weapon = 1.0
+music_volume = 15
