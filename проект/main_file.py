@@ -72,10 +72,13 @@ while not global_game:
     
     # Запускаем музыку.
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.set_volume(0.5)
     
     # Запуск цикла игры.
     while not game_over:
+        
+        # Устанавливаем громкость музыки
+        pygame.mixer.music.set_volume(menu.volume / 100)
         
         # Проверяем нажатие клавиш.
         set_dic['clock'].tick(set_dic['FPS'])

@@ -130,6 +130,12 @@ class Menu(pygame.sprite.Sprite):
         self.upgrade_sprite = []
         set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 50, 50)
         
+        self.options_sprite = []
+        set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
+        
+        # Переменная, отвечающая за громкость музыки.
+        self.volume = 0.5
+        
         # Переменная, отвечающая за выход из меню
         self.game_exit = False
 
@@ -214,7 +220,7 @@ class Menu(pygame.sprite.Sprite):
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             230 < event.pos[1] < 280):
                         self.click_sound.play()
-                        return(self.game_exit)
+                        self.options()
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
@@ -403,6 +409,55 @@ class Menu(pygame.sprite.Sprite):
             
             pygame.display.flip()        
 
+
+    def options(self):
+        
+        self.image = self.menu_sprite[2]
+        self.rect = self.image.get_rect()
+        
+        image_1 = self.options_sprite[0]
+        rect_1 = image_1.get_rect()
+        rect_1.x = 10
+        rect_1.y = 300
+        
+        image_2 = pygame.transform.flip(self.options_sprite[0], True, True)
+        rect_2 = image_2.get_rect()
+        rect_2.x = 10
+        rect_2.y = 360
+        
+        t = True
+        
+        while t:
+            
+            self.screen.blit(self.image, self.rect)
+            self.screen.blit(image_1, rect_1)
+            self.screen.blit(image_2, rect_2)
+            f = pygame.font.Font(None, 26)
+            t = f.render('Здесь должно ', True, self.BLACK)
+            self.screen.blit(t, (self.WIDTH/2, self.HEIGHT/2))
+            self.clock.tick(self.FPS)
+            
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    
+                    if (event.button == 1) and (rect_1.left < event.pos[0] < rect_1.right) and (rect_1.top < event.pos[1] < rect_1.bottom):
+                        self.click_sound.play()
+                        self.volume += 5
+                        if self.volume > 100:
+                            self.volume = 100
+                            
+                    if (event.button == 1) and (rect_2.left < event.pos[0] < rect_2.right) and (rect_2.top < event.pos[1] < rect_2.bottom):
+                        self.click_sound.play()
+                        self.volume -= 5
+                        if self.volume < 0:
+                            self.volume = 0
+                            
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        t = False
+                        
+            pygame.display.flip()
+        
 
     def help_menu(self):
         '''
