@@ -162,15 +162,18 @@ class Player(pygame.sprite.Sprite):
         self.collision() 
 
             
-    def shoot(self, mouse_pos):
+    def shoot(self, mouse_pos, sound_volume):
         '''
         Данный метод отвеччает за стрельбу фаирболом в указанном 
-        направлении / применение огня вокруг игрока.
+        направлении / применение огня вокруг игрока. Также воспроизводит
+        звуки при использовании оружия.
         
         Parameters
         ----------
         mouse_pos : type tuple
             Список, содержащий положение курсора мыши по x и y.
+        sound_volume : type int
+            Передает громкость, с которой надо воспроизводить звуки.
         Returns None.
         -------
         '''
@@ -181,7 +184,8 @@ class Player(pygame.sprite.Sprite):
                                  self.blocksize, set_dic, self.upgrade[2])
             if self.mana >= fireball.cost:
                 self.mana -= fireball.cost
-                self.fireballs_sprites.add(fireball) 
+                self.fireballs_sprites.add(fireball)
+                self.fireball_sound.set_volume(sound_volume / 100)
                 self.fireball_sound.play()
                 
         if self.weapon == 2:
@@ -190,6 +194,7 @@ class Player(pygame.sprite.Sprite):
             if self.mana >= fire.cost:
                 self.mana -= fire.cost               
                 self.fires_sprites.add(fire)
+                self.fire_sound.set_volume(sound_volume / 100)
                 self.fire_sound.play()
         
         if self.weapon == 3:
@@ -200,4 +205,5 @@ class Player(pygame.sprite.Sprite):
             if self.mana >= heal_fire.cost:
                 self.mana -= heal_fire.cost
                 self.heal_fire_sprites.add(heal_fire)
+                self.fireball_sound.set_volume(sound_volume / 100)
                 self.fireball_sound.play()

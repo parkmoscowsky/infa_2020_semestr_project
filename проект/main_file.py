@@ -86,7 +86,7 @@ while not global_game:
                 game_over = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    player.shoot(event.pos)
+                    player.shoot(event.pos, menu.sound_volume)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     player.weapon = 1
@@ -178,7 +178,10 @@ while not global_game:
                 else:
                     player.rect.left = mob.rect.right + player.width
                 player.health -= mob.damage   
-                
+           
+        # Проверяем столкновение игрока с выпавшим сердечком.
+        # Если они столкнулись, то воспроизводится соответствующий звук 
+        # и у игрока повышается здоровье. Сердечко удаляется.       
         if pygame.sprite.groupcollide(health_sprites, player_sprites, False, 
                                       False) and (player.health < 
                                                   player.maxhealth):

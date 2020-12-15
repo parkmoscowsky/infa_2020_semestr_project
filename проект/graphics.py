@@ -142,6 +142,7 @@ class Menu(pygame.sprite.Sprite):
         self.global_point = int(self.upgrade[4])
         self.heal_fire = int(self.upgrade[5])
         self.music_volume = int(self.upgrade[6])
+        self.sound_volume = int(self.upgrade[7])
         
         # Переменная, отвечающая за выход из меню
         self.game_exit = False
@@ -408,7 +409,7 @@ class Menu(pygame.sprite.Sprite):
                         self.upgrade = [self.hp_up, self.mana_up, 
                                         self.damage_up, self.speed_up, 
                                         self.global_point, self.heal_fire, 
-                                        self.music_volume]
+                                        self.music_volume, self.sound_volume]
                         self.save(self.upgrade)
                         t = False
             
@@ -432,10 +433,27 @@ class Menu(pygame.sprite.Sprite):
         rect_2.x = 20
         rect_2.y = 110
         
+        image_3 = self.options_sprite[0]
+        rect_3 = image_3.get_rect()
+        rect_3.x = 20
+        rect_3.y = 200
+        
+        image_4 = pygame.transform.flip(self.options_sprite[0], True, True)
+        rect_4 = image_4.get_rect()
+        rect_4.x = 20
+        rect_4.y = 260
+        
         text1_x = 10
         text1_y = 10
+        
         text2_x = rect_1.right + 15
-        text2_y = (rect_2.top + rect_1.bottom) / 2
+        text2_y = (rect_2.top + rect_1.bottom) / 2 - 5
+        
+        text3_x = 10
+        text3_y = 170
+        
+        text4_x = rect_3.right + 15
+        text4_y = (rect_4.top + rect_3.bottom) / 2 - 5
         
         run = True
         
@@ -444,11 +462,21 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
+            self.screen.blit(image_3, rect_3)
+            self.screen.blit(image_4, rect_4)
+            
             t_1 = f.render('Изменение громкости музыки', True, self.BLACK)
             t_2 = f.render('Громкость музыки ' + str(self.music_volume) + 
                          ' %', True, self.BLACK)
+            t_3 = f.render('Изменение громкости звуков', True, self.BLACK)
+            t_4 = f.render('Громкости звуков ' + str(self.sound_volume) + 
+                           ' %', True, self.BLACK)
+            
             self.screen.blit(t_1, (text1_x, text1_y))
             self.screen.blit(t_2, (text2_x, text2_y))
+            self.screen.blit(t_3, (text3_x, text3_y))
+            self.screen.blit(t_4, (text4_x, text4_y))
+            
             self.clock.tick(self.FPS)
             
             for event in pygame.event.get():
@@ -469,13 +497,29 @@ class Menu(pygame.sprite.Sprite):
                         self.music_volume -= 5
                         if self.music_volume < 0:
                             self.music_volume = 0
+                    
+                    if (event.button == 1) and (
+                        rect_3.left < event.pos[0] < rect_3.right) and (
+                        rect_3.top < event.pos[1] < rect_3.bottom):
+                        self.click_sound.play()
+                        self.sound_volume += 5
+                        if self.sound_volume > 100:
+                            self.sound_volume = 100
+                            
+                    if (event.button == 1) and (
+                        rect_4.left < event.pos[0] < rect_4.right) and (
+                            rect_4.top < event.pos[1] < rect_4.bottom):
+                        self.click_sound.play()
+                        self.sound_volume -= 5
+                        if self.sound_volume < 0:
+                            self.sound_volume = 0
                             
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.upgrade = [self.hp_up, self.mana_up, 
                                         self.damage_up, self.speed_up, 
                                         self.global_point, self.heal_fire, 
-                                        self.music_volume]
+                                        self.music_volume, self.sound_volume]
                         self.save(self.upgrade)
                         run = False
                         
@@ -522,7 +566,8 @@ class Menu(pygame.sprite.Sprite):
                  "sp_up = " + str(upgrade[3]),
                  "global_point = " + str(upgrade[4]),
                  "heal_weapon = " + str(upgrade[5]),
-                 "music_volume = " + str(upgrade[6])] 
+                 "music_volume = " + str(upgrade[6]),
+                 "sound_volume = " + str(upgrade[7])] 
         with open("text.txt", "w") as file:
             for  line in lines:
                 file.write(line + '\n')
