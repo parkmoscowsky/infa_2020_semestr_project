@@ -99,4 +99,3 @@ def set_sprite(sprite_list, number, name, color, width, height):
         img = pygame.transform.scale(img, (width, height))
         sprite_list.append(img)  
         
-        

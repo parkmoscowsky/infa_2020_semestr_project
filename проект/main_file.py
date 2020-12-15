@@ -16,7 +16,7 @@ pygame.mixer.init()
 
 pygame.display.set_caption("Dungeon")
 
-# Достаем необходимые константы из словаря
+# Достаем необходимые константы из словаря set_dic
 WIDTH = set_dic['WIDTH']
 HEIGHT = set_dic['HEIGHT']
 RED = set_dic['RED']
@@ -24,6 +24,11 @@ DARKRED = set_dic['DARKRED']
 BLUE = set_dic['BLUE']
 DARKBLUE = set_dic['DARKBLUE']
 screen = set_dic['screen']
+
+# Достаем необходимые звуки из словаря snd_dic
+heal_sound = snd_dic['heal']
+mob_sound = snd_dic['mob_sound']
+pain_sound = snd_dic['pain_sound']
 
 # Загружаем задний фон из папки с игрой и меняем его масштаб как нам нужно.
 img_dir = path.join(path.dirname(__file__), 'king')
@@ -115,7 +120,9 @@ while not global_game:
         if pygame.sprite.groupcollide(mob_sprites, player.fires_sprites, 
                                       False, False):
             mob.health -= fire.damage
-            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            hit_sount = mob_sound[random.randint(0, 5)]
+            hit_sount.set_volume(menu.sound_volume / 100)
+            hit_sount.play()
             if mob.health <= 0:
                 if random.random() >= 1 - health.chance:
                     health = Health(set_dic, mob.rect.center[0], 
@@ -130,7 +137,9 @@ while not global_game:
         if pygame.sprite.groupcollide(mob_sprites, player.fireballs_sprites, 
                                       False, True):
             mob.health -= fireball.damage
-            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            hit_sount = mob_sound[random.randint(0, 5)]
+            hit_sount.set_volume(menu.sound_volume / 100)
+            hit_sount.play()
             if mob.health <= 0:
                 if random.random() >= 1 - health.chance:
                     health = Health(set_dic, mob.rect.center[0], 
@@ -145,7 +154,9 @@ while not global_game:
         if pygame.sprite.groupcollide(mob_sprites, player.heal_fire_sprites, 
                                       False, True):
             mob.health -= fireball.damage
-            snd_dic['mob_sound'][random.randint(0, 5)].play()
+            hit_sount = mob_sound[random.randint(0, 5)]
+            hit_sount.set_volume(menu.sound_volume / 100)
+            hit_sount.play()
             if mob.health <= 0:
                 if random.random() >= 1 - health.chance:
                     health = Health(set_dic, mob.rect.center[0], 
@@ -159,7 +170,8 @@ while not global_game:
              
             if player.health < player.maxhealth:    
                 player.health += heal_fire.heal
-                snd_dic['heal'].play()
+                heal_sound.set_volume(menu.sound_volume / 100)
+                heal_sound.play()
                 if player.health > player.maxhealth:
                     player.health = player.maxhealth
                 
@@ -168,7 +180,9 @@ while not global_game:
         # При столкновении воспроизводится случайный звук удара по игроку.
         if pygame.sprite.groupcollide(mob_sprites, player_sprites, 
                                       False, False):
-            snd_dic['pain_sound'][random.randint(0,5)].play()
+            hit_sount = pain_sound[random.randint(0, 5)]
+            hit_sount.set_volume(menu.sound_volume / 100)
+            hit_sount.play()
             if (player.rect.right >= mob.rect.left and player.rect.left <= 
                 mob.rect.right) or (player.rect.left <= mob.rect.right and 
                                     player.rect.right >= mob.rect.left):
@@ -186,7 +200,8 @@ while not global_game:
                                       False) and (player.health < 
                                                   player.maxhealth):
             player.health += health.heal
-            snd_dic['heal'].play()
+            heal_sound.set_volume(menu.sound_volume / 100)
+            heal_sound.play()
             if player.health > player.maxhealth:
                 player.health = player.maxhealth
             pygame.sprite.groupcollide(health_sprites, player_sprites, 

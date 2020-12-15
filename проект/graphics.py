@@ -157,6 +157,7 @@ class Menu(pygame.sprite.Sprite):
         -------
         '''
         while True:
+            self.click_sound.set_volume(self.sound_volume / 100)
             self.image = self.menu_sprite[0]
             self.rect = self.image.get_rect()
             self.clock.tick(self.FPS)
@@ -210,6 +211,7 @@ class Menu(pygame.sprite.Sprite):
         -------
         '''
         while True:
+            self.click_sound.set_volume(self.sound_volume / 100)
             self.image = self.menu_sprite[1]
             self.rect = self.image.get_rect()
             self.clock.tick(self.FPS)
@@ -283,6 +285,9 @@ class Menu(pygame.sprite.Sprite):
         rect_5 = image_5.get_rect()
         rect_5.x = 10
         rect_5.y = 370
+        
+        # Устанавливаем громкость звуков в магазине.
+        self.buy_sound.set_volume(self.sound_volume / 100)
         
         # Переменная, отвечающая за то, что игрок находится в магазине.
         t = True
@@ -458,6 +463,8 @@ class Menu(pygame.sprite.Sprite):
         run = True
         
         while run:
+            
+            self.click_sound.set_volume(self.sound_volume / 100)
             
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
