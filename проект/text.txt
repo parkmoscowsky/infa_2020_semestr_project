@@ -1,8 +1,8 @@
 hp_up = 0
 mana_up = 0
-damage_up = 0
+damage_up = 4
 sp_up = 0
-global_point = 2000
+global_point = 1985
 heal_weapon = 1
 music_volume = 35
 sound_volume = 80

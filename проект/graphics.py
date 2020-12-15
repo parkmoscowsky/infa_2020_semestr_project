@@ -4,7 +4,7 @@ from settings import set_sprite
 from settings import set_dic
 from settings import snd_dic
 from player import Player
-from weapon import Fireball
+from weapon import Fireball, Heal_fire, Fire
 
 # Достаем из словаря необходимые нам константы.
 screen = set_dic['screen']
@@ -134,6 +134,9 @@ class Menu(pygame.sprite.Sprite):
         
         self.options_sprite = []
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
+        
+        self.fire_help_sprite = []
+        set_sprite(self.fire_help_sprite, 1, 'fire_help', self.BLACK, 50, 50)
         
         self.help_sprite = []
         set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 100, 140)
@@ -572,8 +575,10 @@ class Menu(pygame.sprite.Sprite):
         -------
         '''
         player = Player(self.upgrade, set_dic, snd_dic)
-        fireball = Fireball(1, 2, 3, 4, 5, set_dic, self.damage_up
-                            )
+        fireball = Fireball(1, 2, 3, 4, 5, set_dic, self.damage_up)
+        heal_fire = Heal_fire(1, 2, 3, 4, 5, set_dic, self.damage_up)
+        fire = Fire((0, 0), set_dic)
+                
         # Загружаем задний фон для этого меню
         self.image = self.menu_sprite[3]
         self.rect = self.image.get_rect()
@@ -586,6 +591,21 @@ class Menu(pygame.sprite.Sprite):
         rect_1.x = 40
         rect_1.y = 30
         
+        image_2 = self.upgrade_sprite[2]
+        rect_2 = image_2.get_rect()
+        rect_2.x = 350
+        rect_2.y = 30
+        
+        image_3 = self.fire_help_sprite[0] 
+        rect_3 = image_3.get_rect()
+        rect_3.x = 350
+        rect_3.y = 90
+        
+        image_4 = self.upgrade_sprite[4]
+        rect_4 = image_4.get_rect()
+        rect_4.x = 350
+        rect_4.y = 150
+        
         text1_x = rect_1.right + 15
         text1_y = rect_1.top + 20
         
@@ -594,6 +614,15 @@ class Menu(pygame.sprite.Sprite):
         
         text3_x = rect_1.right + 15
         text3_y = rect_1.top + 80
+        
+        t_weapon1_x = rect_2.right + 15
+        t_weapon1_y = rect_2.center[1] - 5
+        
+        t_weapon2_x = rect_3.right + 15
+        t_weapon2_y = rect_3.center[1] - 5
+        
+        t_weapon3_x = rect_4.right + 15
+        t_weapon3_y = rect_4.center[1] - 5
         
         text_control1_x = 40
         text_control1_y = 200
@@ -640,6 +669,11 @@ class Menu(pygame.sprite.Sprite):
         t_1 = f.render('Здоровье ' + str(int(player.maxhealth)), True, self.BLACK)
         t_2 = f.render('Мана ' + str(int(player.maxmana)), True, self.BLACK)
         t_3 = f.render('Скорость ' + str(int(player.maxspeed)), True, self.BLACK)
+        
+        t_weapon1 = f.render('Урон ' + str(int(fireball.damage)) + ', стоимость ' + str(int(fireball.cost)), True, self.BLACK)
+        t_weapon2 = f.render('Урон 30, стоимость ' + str(int(fire.cost)), True, self.BLACK)
+        t_weapon3 = f.render('Урон ' + str(int(heal_fire.damage)) + ', восстановление ' + str(int(heal_fire.heal)) + ', стоимость ' + str(int(heal_fire.cost)), True, self.BLACK)
+        
         t_control1 = f.render('Управление', True, self.BLACK) 
         t_control2 = f.render('Для перемещения влево используйте клавишу A', True, self.BLACK)
         t_control3 = f.render('Для перемещения вправо используйте клавишу D', True, self.BLACK)
@@ -662,9 +696,18 @@ class Menu(pygame.sprite.Sprite):
             
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
+            self.screen.blit(image_2, rect_2)
+            self.screen.blit(image_3, rect_3)
+            self.screen.blit(image_4, rect_4)
+            
             self.screen.blit(t_1, (text1_x, text1_y))
             self.screen.blit(t_2, (text2_x, text2_y))
             self.screen.blit(t_3, (text3_x, text3_y))
+            
+            self.screen.blit(t_weapon1, (t_weapon1_x, t_weapon1_y))
+            self.screen.blit(t_weapon2, (t_weapon2_x, t_weapon2_y))
+            self.screen.blit(t_weapon3, (t_weapon3_x, t_weapon3_y))
+            
             self.screen.blit(t_control1, (text_control1_x, text_control1_y))
             self.screen.blit(t_control2, (text_control2_x, text_control2_y))
             self.screen.blit(t_control3, (text_control3_x, text_control3_y))
@@ -672,6 +715,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t_control5, (text_control5_x, text_control5_y))
             self.screen.blit(t_control6, (text_control6_x, text_control6_y))
             self.screen.blit(t_control7, (text_control7_x, text_control7_y))
+            
             self.screen.blit(t_info1, (text_info1_x, text_info1_y))
             self.screen.blit(t_info2, (text_info2_x, text_info2_y))
             self.screen.blit(t_info3, (text_info3_x, text_info3_y))
