@@ -290,9 +290,9 @@ class Menu(pygame.sprite.Sprite):
         self.buy_sound.set_volume(self.sound_volume / 100)
         
         # Переменная, отвечающая за то, что игрок находится в магазине.
-        t = True
+        run = True
         
-        while t:
+        while run:
             
             # Устанавливаем стоимость каждого улучшения в магазине.
             hp_up_cost = int((self.hp_up/5 + 1)*4)
@@ -367,6 +367,7 @@ class Menu(pygame.sprite.Sprite):
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     
+                    # Проверка покупки улучшения для здоровья.
                     if  (rect_1.left < event.pos[0] < rect_1.right) and (
                             rect_1.top < event.pos[1] < rect_1.bottom) and (
                                 self.global_point >= hp_up_cost) and (
@@ -374,7 +375,8 @@ class Menu(pygame.sprite.Sprite):
                         self.global_point -= hp_up_cost               
                         self.hp_up += 5
                         self.buy_sound.play()
-                        
+                     
+                    # Проверка покупки улучшения для маны.    
                     if (rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom) and (
                                 self.global_point >= mana_up_cost) and (
@@ -382,7 +384,8 @@ class Menu(pygame.sprite.Sprite):
                         self.global_point -= mana_up_cost
                         self.mana_up += 5
                         self.buy_sound.play()
-                        
+                     
+                    # Проверка покупки улучшения для урона.    
                     if (rect_3.left < event.pos[0] < rect_3.right) and (
                             rect_3.top < event.pos[1] < rect_3.bottom) and (
                                 self.global_point >= damage_up_cost) and (
@@ -390,7 +393,8 @@ class Menu(pygame.sprite.Sprite):
                         self.global_point -= damage_up_cost
                         self.damage_up += 2
                         self.buy_sound.play()
-                        
+                     
+                    # Проверка покупки улучшения для скорпости.    
                     if (rect_4.left < event.pos[0] < rect_4.right) and (
                             rect_4.top < event.pos[1] < rect_4.bottom) and (
                                 self.global_point >= speed_up_cost) and (
@@ -399,35 +403,47 @@ class Menu(pygame.sprite.Sprite):
                         self.speed_up += 1
                         self.buy_sound.play()
                     
+                    # Проверка покупки оружия, восстанавливающего жизни.
                     if (rect_5.left < event.pos[0] < rect_5.right) and (
                             rect_5. top < event.pos[1] < rect_5.bottom) and (
-                                self.global_point >= 300) and (self.heal_fire == 0):
+                                self.global_point >= 300) and (
+                                    self.heal_fire == 0):
                         self.global_point -= heal_weapon_cost
                         self.heal_fire = 1
                         self.buy_sound.play()
                         
-                        
+                # При нажатии клавиши escape происходит выход из магазина     
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.image = self.menu_sprite[0]
-                        self.rect = self.image.get_rect()
                         self.upgrade = [self.hp_up, self.mana_up, 
                                         self.damage_up, self.speed_up, 
                                         self.global_point, self.heal_fire, 
                                         self.music_volume, self.sound_volume]
                         self.save(self.upgrade)
-                        t = False
+                        run = False
             
             pygame.display.flip()        
 
 
     def options(self):
-        
+        '''
+        Данный метод отвечает за вызов меню options, 
+        в котором можно изменять громкость музыки и
+        звуков в игре.
+
+        Returns None.
+        -------
+        '''
+        # Загружаем задний фон для этого меню
         self.image = self.menu_sprite[2]
         self.rect = self.image.get_rect()
         
+        # Устанавливаем шрифт и его размер, чтобы писать уровень громкости.
         f = pygame.font.Font(None, 26)
         
+        # Далее задаем местоположение кнопок для регулирования 
+        # уровня громкости. Для удобства каждая кнопка выделена в 
+        # виде отдельного блока.
         image_1 = self.options_sprite[0]
         rect_1 = image_1.get_rect()
         rect_1.x = 20
@@ -448,6 +464,7 @@ class Menu(pygame.sprite.Sprite):
         rect_4.x = 20
         rect_4.y = 260
         
+        # Указываем местоположение фрагментов текста. Также разбито на блоки.
         text1_x = 10
         text1_y = 10
         
@@ -460,18 +477,22 @@ class Menu(pygame.sprite.Sprite):
         text4_x = rect_3.right + 15
         text4_y = (rect_4.top + rect_3.bottom) / 2 - 5
         
+        # Переменная, отвечающая за то, что открыто меню options.
         run = True
         
         while run:
             
+            # Устанавливаем громкость звука пр нажатии на кнопки.
             self.click_sound.set_volume(self.sound_volume / 100)
             
+            # Отображаем на экране кнопки.
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
             self.screen.blit(image_3, rect_3)
             self.screen.blit(image_4, rect_4)
             
+            # Создаем текст, который будем выводить на экран.
             t_1 = f.render('Изменение громкости музыки', True, self.BLACK)
             t_2 = f.render('Громкость музыки ' + str(self.music_volume) + 
                          ' %', True, self.BLACK)
@@ -479,16 +500,17 @@ class Menu(pygame.sprite.Sprite):
             t_4 = f.render('Громкости звуков ' + str(self.sound_volume) + 
                            ' %', True, self.BLACK)
             
+            # Вывоим текст на экран.
             self.screen.blit(t_1, (text1_x, text1_y))
             self.screen.blit(t_2, (text2_x, text2_y))
             self.screen.blit(t_3, (text3_x, text3_y))
             self.screen.blit(t_4, (text4_x, text4_y))
             
-            self.clock.tick(self.FPS)
-            
+            # Цикл, в котором проверяется нажатие на кнопки.           
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     
+                    # Прибавление громкости музыки.
                     if (event.button == 1) and (
                         rect_1.left < event.pos[0] < rect_1.right) and (
                         rect_1.top < event.pos[1] < rect_1.bottom):
@@ -496,7 +518,8 @@ class Menu(pygame.sprite.Sprite):
                         self.music_volume += 5
                         if self.music_volume > 100:
                             self.music_volume = 100
-                            
+                        
+                    # Убавление громкости музыки.        
                     if (event.button == 1) and (
                         rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom):
@@ -505,6 +528,7 @@ class Menu(pygame.sprite.Sprite):
                         if self.music_volume < 0:
                             self.music_volume = 0
                     
+                    # Прибавление громкости звуков.
                     if (event.button == 1) and (
                         rect_3.left < event.pos[0] < rect_3.right) and (
                         rect_3.top < event.pos[1] < rect_3.bottom):
@@ -512,7 +536,8 @@ class Menu(pygame.sprite.Sprite):
                         self.sound_volume += 5
                         if self.sound_volume > 100:
                             self.sound_volume = 100
-                            
+                    
+                    # Убавление громкости звуков
                     if (event.button == 1) and (
                         rect_4.left < event.pos[0] < rect_4.right) and (
                             rect_4.top < event.pos[1] < rect_4.bottom):
@@ -520,7 +545,9 @@ class Menu(pygame.sprite.Sprite):
                         self.sound_volume -= 5
                         if self.sound_volume < 0:
                             self.sound_volume = 0
-                            
+                
+                # При нажатии клавиши escape происходит сохранение всех 
+                # изменений и выход в меню паузы/основное меню.            
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.upgrade = [self.hp_up, self.mana_up, 
