@@ -136,7 +136,7 @@ class Menu(pygame.sprite.Sprite):
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
         
         self.help_sprite = []
-        set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 120, 170)
+        set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 100, 140)
         
         # Переменная, отвечающая за громкость музыки.
         self.upgrade = self.load_data()
@@ -596,25 +596,46 @@ class Menu(pygame.sprite.Sprite):
         text3_y = rect_1.top + 80
         
         text_control1_x = 40
-        text_control1_y = 250
+        text_control1_y = 200
         
         text_control2_x = 40
-        text_control2_y = 275
+        text_control2_y = text_control1_y + 25
         
         text_control3_x = 40
-        text_control3_y = 300
+        text_control3_y = text_control1_y + 50
         
         text_control4_x = 40
-        text_control4_y = 325
+        text_control4_y = text_control1_y + 75
         
         text_control5_x = 40
-        text_control5_y = 350
+        text_control5_y = text_control1_y + 100
         
         text_control6_x = 40
-        text_control6_y = 375
+        text_control6_y = text_control1_y + 125
         
         text_control7_x = 40
-        text_control7_y = 400
+        text_control7_y = text_control1_y + 150
+        
+        text_info1_x = 300
+        text_info1_y = 400
+        
+        text_info2_x = 40
+        text_info2_y = text_info1_y + 25
+        
+        text_info3_x = 40
+        text_info3_y = text_info1_y + 50
+        
+        text_info4_x = 40
+        text_info4_y = text_info1_y + 75
+        
+        text_info5_x = 40
+        text_info5_y = text_info1_y + 100
+        
+        text_info6_x = 40
+        text_info6_y = text_info1_y + 125
+        
+        text_info7_x = 40
+        text_info7_y = text_info1_y + 150
         
         t_1 = f.render('Здоровье ' + str(int(player.maxhealth)), True, self.BLACK)
         t_2 = f.render('Мана ' + str(int(player.maxmana)), True, self.BLACK)
@@ -626,6 +647,14 @@ class Menu(pygame.sprite.Sprite):
         t_control5 = f.render('Для использования оружия нажмите левую кнопку мыши', True, self.BLACK)
         t_control6 = f.render('Для переключения оружия используйте кнопки 1, 2, 3', True, self.BLACK)
         t_control7 = f.render('Для выхода из всех меню используйте клавишу esc', True, self.BLACK)
+        t_info1 = f.render('Информация об игре', True, self.BLACK)
+        t_info2 = f.render('Данная игра создана в рамках проектной работы по'
+                           ' информатике студентами МФТИ, ', True, self.BLACK) 
+        t_info3 = f.render('физтех-школы ЛФИ Покровским Максимом и Хвосточенко Константином. Эта игра', True, self.BLACK)
+        t_info4 = f.render('доступна любым пользователям github.com по ссылке:', True, self.BLACK)
+        t_info5 = f.render('https://github.com/parkmoscowsky/infa_2020_semestr_project', True, self.BLACK)
+        t_info6 = f.render('Все изображения, использовавшиеся в игре, а также некоторые звуки взяты из ', True, self.BLACK)
+        t_info7 = f.render('открытого интернет ресурса https://opengameart.org/.', True, self.BLACK)
         
         run = True
         
@@ -643,6 +672,13 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(t_control5, (text_control5_x, text_control5_y))
             self.screen.blit(t_control6, (text_control6_x, text_control6_y))
             self.screen.blit(t_control7, (text_control7_x, text_control7_y))
+            self.screen.blit(t_info1, (text_info1_x, text_info1_y))
+            self.screen.blit(t_info2, (text_info2_x, text_info2_y))
+            self.screen.blit(t_info3, (text_info3_x, text_info3_y))
+            self.screen.blit(t_info4, (text_info4_x, text_info4_y))
+            self.screen.blit(t_info5, (text_info5_x, text_info5_y))
+            self.screen.blit(t_info6, (text_info6_x, text_info6_y))
+            self.screen.blit(t_info7, (text_info7_x, text_info7_y))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
