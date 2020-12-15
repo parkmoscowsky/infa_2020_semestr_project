@@ -3,6 +3,8 @@ import time
 from settings import set_sprite
 from settings import set_dic
 from settings import snd_dic
+from player import Player
+from weapon import Fireball
 
 # Достаем из словаря необходимые нам константы.
 screen = set_dic['screen']
@@ -120,7 +122,7 @@ class Menu(pygame.sprite.Sprite):
         
         # Создаем список со всеми картинками для меню.
         self.menu_sprite = []
-        set_sprite(self.menu_sprite, 3, 'menu', self.BLACK, 
+        set_sprite(self.menu_sprite, 4, 'menu', self.BLACK, 
                    self.WIDTH, self.HEIGHT)
         self.image = self.menu_sprite[0]
         self.rect = self.image.get_rect()
@@ -132,6 +134,9 @@ class Menu(pygame.sprite.Sprite):
         
         self.options_sprite = []
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
+        
+        self.help_sprite = []
+        set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 120, 170)
         
         # Переменная, отвечающая за громкость музыки.
         self.upgrade = self.load_data()
@@ -495,7 +500,7 @@ class Menu(pygame.sprite.Sprite):
             # Создаем текст, который будем выводить на экран.
             t_1 = f.render('Изменение громкости музыки', True, self.BLACK)
             t_2 = f.render('Громкость музыки ' + str(self.music_volume) + 
-                         ' %', True, self.BLACK)
+                           ' %', True, self.BLACK)
             t_3 = f.render('Изменение громкости звуков', True, self.BLACK)
             t_4 = f.render('Громкости звуков ' + str(self.sound_volume) + 
                            ' %', True, self.BLACK)
@@ -566,18 +571,53 @@ class Menu(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
-        t = True
-        while t:
-            self.screen.fill(self.WHITE)
-            f = pygame.font.Font(None, 26)
-            t = f.render('Здесь должно что-то появиться потом ...', 
-                         True, self.BLACK)
-            self.screen.blit(t, (self.WIDTH/2, self.HEIGHT/2))
-            self.clock.tick(self.FPS)
+        player = Player(self.upgrade, set_dic, snd_dic)
+        fireball = Fireball(1, 2, 3, 4, 5, set_dic, self.damage_up
+                            )
+        # Загружаем задний фон для этого меню
+        self.image = self.menu_sprite[3]
+        self.rect = self.image.get_rect()
+        
+        # Устанавливаем шрифт и его размер.
+        f = pygame.font.Font(None, 26)
+        
+        image_1 = self.help_sprite[0]
+        rect_1 = image_1.get_rect()
+        rect_1.x = 40
+        rect_1.y = 30
+        
+        text1_x = rect_1.right + 15
+        text1_y = rect_1.top + 20
+        
+        text2_x = rect_1.right + 15
+        text2_y = rect_1.top + 50
+        
+        text3_x = rect_1.right + 15
+        text3_y = rect_1.top + 80
+        
+        text4_x = rect_1.right + 15
+        text4_y = rect_1.top + 110
+        
+        run = True
+        
+        while run:
+            
+            t_1 = f.render('Здоровье ' + str(int(player.maxhealth)), True, self.BLACK)
+            t_2 = f.render('Мана ' + str(int(player.maxmana)), True, self.BLACK)
+            t_3 = f.render('Урон ' + str(int(fireball.damage)), True, self.BLACK)
+            t_4 = f.render('Скорость ' + str(int(player.maxspeed)), True, self.BLACK)
+            
+            self.screen.blit(self.image, self.rect)
+            self.screen.blit(image_1, rect_1)
+            self.screen.blit(t_1, (text1_x, text1_y))
+            self.screen.blit(t_2, (text2_x, text2_y))
+            self.screen.blit(t_3, (text3_x, text3_y))
+            self.screen.blit(t_4, (text4_x, text4_y))
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        t = False
+                        run = False
             pygame.display.flip()
             
             
