@@ -77,7 +77,7 @@ while not global_game:
     while not game_over:
         
         # Устанавливаем громкость музыки
-        pygame.mixer.music.set_volume(menu.volume / 100)
+        pygame.mixer.music.set_volume(menu.music_volume / 100)
         
         # Проверяем нажатие клавиш.
         set_dic['clock'].tick(set_dic['FPS'])
@@ -96,7 +96,7 @@ while not global_game:
                     player.weapon = 3
                 if event.key == pygame.K_ESCAPE:
                     pygame.mixer.music.stop()
-                    game_over = menu.paus_menu(upgrade)
+                    game_over = menu.paus_menu()
                     if game_over == False:
                         pygame.mixer.music.play(-1)
                     

@@ -134,7 +134,14 @@ class Menu(pygame.sprite.Sprite):
         set_sprite(self.options_sprite, 1, 'sound_up', self.BLACK, 50, 50)
         
         # Переменная, отвечающая за громкость музыки.
-        self.volume = int(self.load_data()[6])
+        self.upgrade = self.load_data()
+        self.hp_up = int(self.upgrade[0])
+        self.mana_up = int(self.upgrade[1])
+        self.damage_up = int(self.upgrade[2])
+        self.speed_up = int(self.upgrade[3])
+        self.global_point = int(self.upgrade[4])
+        self.heal_fire = int(self.upgrade[5])
+        self.music_volume = int(self.upgrade[6])
         
         # Переменная, отвечающая за выход из меню
         self.game_exit = False
@@ -194,14 +201,9 @@ class Menu(pygame.sprite.Sprite):
             pygame.display.flip()
 
 
-    def paus_menu(self, upgrade):
+    def paus_menu(self):
         '''
-        Данный метод открывает меню паузы во время игры
-
-        Parameters
-        ----------
-        upgrade : type list
-            Содержит в себе значение, которые необходимо сохранить в файл.
+        Данный метод открывает меню паузы во время игры.
 
         Returns None.
         -------
@@ -222,8 +224,6 @@ class Menu(pygame.sprite.Sprite):
                             230 < event.pos[1] < 280):
                         self.click_sound.play()
                         self.options()
-                        upgrade[6] = self.volume
-                        self.save(upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             300 < event.pos[1] < 350):
@@ -233,12 +233,12 @@ class Menu(pygame.sprite.Sprite):
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             370 < event.pos[1] < 420):
                         self.click_sound.play()
-                        self.save(upgrade)
+                        self.save(self.upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
                         self.click_sound.play()
-                        self.save(upgrade)
+                        self.save(self.upgrade)
                         self.game_exit = True
                         return(self.game_exit)
                         
@@ -253,8 +253,6 @@ class Menu(pygame.sprite.Sprite):
         Returns None.
         -------
         '''
-        # Создаем список со всеми улучшениями.
-        upgrade = self.load_data()
         
         # Настраиваем расположение всех спрайтов, используемых в магазине.
         self.image = self.menu_sprite[2]
@@ -291,10 +289,10 @@ class Menu(pygame.sprite.Sprite):
         while t:
             
             # Устанавливаем стоимость каждого улучшения в магазине.
-            hp_up_cost = (upgrade[0]/5 + 1)*4
-            mana_up_cost = (upgrade[1]/5 + 1)*4
-            damage_up_cost = (upgrade[2]/2 + 1)*5
-            speed_up_cost = (upgrade[3] + 1) * 20
+            hp_up_cost = int((self.hp_up/5 + 1)*4)
+            mana_up_cost = int((self.mana_up/5 + 1)*4)
+            damage_up_cost = int((self.damage_up/2 + 1)*5)
+            speed_up_cost = int((self.speed_up + 1) * 20)
             heal_weapon_cost = 300
             
             # Здесь задается шрифт, стиль написания букв в магазине.
@@ -311,44 +309,44 @@ class Menu(pygame.sprite.Sprite):
             # Создаем текст, который пишем около спрайтов.
             # Если у игрока куплено максимальное улучшение, 
             # то выводим ему сообщение об этом.
-            if upgrade[0] < 50:
+            if self.hp_up < 50:
                 t_1 = f.render('Улучшение здоровья. +5 к здоровью. Текущее ' 
-                               'доп. здоровье '+ str(int(upgrade[0])) + 
-                               '. Стоимость '+ str(int(hp_up_cost)), True, 
+                               'доп. здоровье '+ str(self.hp_up) + 
+                               '. Стоимость '+ str(hp_up_cost), True, 
                                self.BLACK)
             else:
                 t_1 = f.render('Здоровье max', True, self.BLACK)
             
-            if upgrade[1] < 50:
+            if self.mana_up < 50:
                 t_2 = f.render('Улучшение маны. +5 к мане. Текущая доп. мана '
-                               + str(int(upgrade[1])) + '. Стоимость ' + 
-                               str(int(mana_up_cost)), True, self.BLACK)
+                               + str(self.mana_up) + '. Стоимость ' + 
+                               str(mana_up_cost), True, self.BLACK)
             else:
                 t_2 = f.render('Мана max', True, self.BLACK)
             
-            if upgrade[2] < 10:
+            if self.damage_up < 10:
                 t_3 = f.render('Улучшение урона фаирбола. +2 к урону. Текущий'
-                               ' доп. урон ' +str(int(upgrade[2])) + 
-                               '. Стоимость ' +str(int(damage_up_cost)), 
+                               ' доп. урон ' +str(self.damage_up) + 
+                               '. Стоимость ' +str(damage_up_cost), 
                                True, self.BLACK)
             else:
                 t_3 = f.render('Урон max', True, self.BLACK)
                 
-            if upgrade[3] < 5:
+            if self.speed_up < 5:
                 t_4 = f.render('Улучшение скорости. +1 к скорости. Текущая' 
-                               ' доп. скорость ' + str(int(upgrade[3])) + 
-                               '. Стоимость '+ str(int(speed_up_cost)), True, 
+                               ' доп. скорость ' + str(self.speed_up) + 
+                               '. Стоимость '+ str(speed_up_cost), True, 
                                self.BLACK)
             else:
                 t_4 = f.render('Скорость max', True, self.BLACK)
             
-            if upgrade[5] == 0:
+            if self.heal_fire == 0:
                 t_5 = f.render('Восстанавливающее оружие. Стоимость 300 очков'
                                , True, self.BLACK)
             else:
                 t_5 = f.render('У вас приобретен этот навык', True, self.BLACK)
             
-            t = f.render('Ваш счёт ' + str(int(upgrade[4])), True, self.BLACK)
+            t = f.render('Ваш счёт ' + str(self.global_point), True, self.BLACK)
             
             # Отрисовка текста.
             self.screen.blit(t_1, (rect_1.right + 15, rect_1.center[1] - 5))
@@ -365,49 +363,53 @@ class Menu(pygame.sprite.Sprite):
                     
                     if  (rect_1.left < event.pos[0] < rect_1.right) and (
                             rect_1.top < event.pos[1] < rect_1.bottom) and (
-                                upgrade[4] >= hp_up_cost) and (
-                                    upgrade[0] < 50):
-                        upgrade[4] -= hp_up_cost               
-                        upgrade[0] += 5
+                                self.global_point >= hp_up_cost) and (
+                                    self.hp_up < 50):
+                        self.global_point -= hp_up_cost               
+                        self.hp_up += 5
                         self.buy_sound.play()
                         
                     if (rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom) and (
-                                upgrade[4] >= mana_up_cost) and (
-                                    upgrade[1] < 50):
-                        upgrade[4] -= mana_up_cost
-                        upgrade[1] += 5
+                                self.global_point >= mana_up_cost) and (
+                                    self.mana_up < 50):
+                        self.global_point -= mana_up_cost
+                        self.mana_up += 5
                         self.buy_sound.play()
                         
                     if (rect_3.left < event.pos[0] < rect_3.right) and (
                             rect_3.top < event.pos[1] < rect_3.bottom) and (
-                                upgrade[4] >= damage_up_cost) and (
-                                    upgrade[2] < 10):
-                        upgrade[4] -= damage_up_cost
-                        upgrade[2] += 2
+                                self.global_point >= damage_up_cost) and (
+                                    self.damage_up < 10):
+                        self.global_point -= damage_up_cost
+                        self.damage_up += 2
                         self.buy_sound.play()
                         
                     if (rect_4.left < event.pos[0] < rect_4.right) and (
                             rect_4.top < event.pos[1] < rect_4.bottom) and (
-                                upgrade[4] >= speed_up_cost) and (
-                                    upgrade[3] < 5):
-                        upgrade[4] -= speed_up_cost
-                        upgrade[3] += 1
+                                self.global_point >= speed_up_cost) and (
+                                    self.speed_up < 5):
+                        self.global_point -= speed_up_cost
+                        self.speed_up += 1
                         self.buy_sound.play()
                     
                     if (rect_5.left < event.pos[0] < rect_5.right) and (
                             rect_5. top < event.pos[1] < rect_5.bottom) and (
-                                upgrade[4] >= 300) and (upgrade[5] == 0):
-                        upgrade[4] -= heal_weapon_cost
-                        upgrade[5] = 1
+                                self.global_point >= 300) and (self.heal_fire == 0):
+                        self.global_point -= heal_weapon_cost
+                        self.heal_fire = 1
                         self.buy_sound.play()
                         
-                    self.save(upgrade)
-                
+                        
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.image = self.menu_sprite[0]
                         self.rect = self.image.get_rect()
+                        self.upgrade = [self.hp_up, self.mana_up, 
+                                        self.damage_up, self.speed_up, 
+                                        self.global_point, self.heal_fire, 
+                                        self.music_volume]
+                        self.save(self.upgrade)
                         t = False
             
             pygame.display.flip()        
@@ -443,7 +445,7 @@ class Menu(pygame.sprite.Sprite):
             self.screen.blit(image_1, rect_1)
             self.screen.blit(image_2, rect_2)
             t_1 = f.render('Изменение громкости музыки', True, self.BLACK)
-            t_2 = f.render('Громкость музыки ' + str(self.volume) + 
+            t_2 = f.render('Громкость музыки ' + str(self.music_volume) + 
                          ' %', True, self.BLACK)
             self.screen.blit(t_1, (text1_x, text1_y))
             self.screen.blit(t_2, (text2_x, text2_y))
@@ -456,20 +458,25 @@ class Menu(pygame.sprite.Sprite):
                         rect_1.left < event.pos[0] < rect_1.right) and (
                         rect_1.top < event.pos[1] < rect_1.bottom):
                         self.click_sound.play()
-                        self.volume += 5
-                        if self.volume > 100:
-                            self.volume = 100
+                        self.music_volume += 5
+                        if self.music_volume > 100:
+                            self.music_volume = 100
                             
                     if (event.button == 1) and (
                         rect_2.left < event.pos[0] < rect_2.right) and (
                             rect_2.top < event.pos[1] < rect_2.bottom):
                         self.click_sound.play()
-                        self.volume -= 5
-                        if self.volume < 0:
-                            self.volume = 0
+                        self.music_volume -= 5
+                        if self.music_volume < 0:
+                            self.music_volume = 0
                             
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        self.upgrade = [self.hp_up, self.mana_up, 
+                                        self.damage_up, self.speed_up, 
+                                        self.global_point, self.heal_fire, 
+                                        self.music_volume]
+                        self.save(self.upgrade)
                         run = False
                         
             pygame.display.flip()
