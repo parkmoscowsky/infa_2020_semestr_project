@@ -595,24 +595,54 @@ class Menu(pygame.sprite.Sprite):
         text3_x = rect_1.right + 15
         text3_y = rect_1.top + 80
         
-        text4_x = rect_1.right + 15
-        text4_y = rect_1.top + 110
+        text_control1_x = 40
+        text_control1_y = 250
+        
+        text_control2_x = 40
+        text_control2_y = 275
+        
+        text_control3_x = 40
+        text_control3_y = 300
+        
+        text_control4_x = 40
+        text_control4_y = 325
+        
+        text_control5_x = 40
+        text_control5_y = 350
+        
+        text_control6_x = 40
+        text_control6_y = 375
+        
+        text_control7_x = 40
+        text_control7_y = 400
+        
+        t_1 = f.render('Здоровье ' + str(int(player.maxhealth)), True, self.BLACK)
+        t_2 = f.render('Мана ' + str(int(player.maxmana)), True, self.BLACK)
+        t_3 = f.render('Скорость ' + str(int(player.maxspeed)), True, self.BLACK)
+        t_control1 = f.render('Управление', True, self.BLACK) 
+        t_control2 = f.render('Для перемещения влево используйте клавишу A', True, self.BLACK)
+        t_control3 = f.render('Для перемещения вправо используйте клавишу D', True, self.BLACK)
+        t_control4 = f.render('Для прыжка используйте пробел', True, self.BLACK)
+        t_control5 = f.render('Для использования оружия нажмите левую кнопку мыши', True, self.BLACK)
+        t_control6 = f.render('Для переключения оружия используйте кнопки 1, 2, 3', True, self.BLACK)
+        t_control7 = f.render('Для выхода из всех меню используйте клавишу esc', True, self.BLACK)
         
         run = True
         
         while run:
-            
-            t_1 = f.render('Здоровье ' + str(int(player.maxhealth)), True, self.BLACK)
-            t_2 = f.render('Мана ' + str(int(player.maxmana)), True, self.BLACK)
-            t_3 = f.render('Урон ' + str(int(fireball.damage)), True, self.BLACK)
-            t_4 = f.render('Скорость ' + str(int(player.maxspeed)), True, self.BLACK)
             
             self.screen.blit(self.image, self.rect)
             self.screen.blit(image_1, rect_1)
             self.screen.blit(t_1, (text1_x, text1_y))
             self.screen.blit(t_2, (text2_x, text2_y))
             self.screen.blit(t_3, (text3_x, text3_y))
-            self.screen.blit(t_4, (text4_x, text4_y))
+            self.screen.blit(t_control1, (text_control1_x, text_control1_y))
+            self.screen.blit(t_control2, (text_control2_x, text_control2_y))
+            self.screen.blit(t_control3, (text_control3_x, text_control3_y))
+            self.screen.blit(t_control4, (text_control4_x, text_control4_y))
+            self.screen.blit(t_control5, (text_control5_x, text_control5_y))
+            self.screen.blit(t_control6, (text_control6_x, text_control6_y))
+            self.screen.blit(t_control7, (text_control7_x, text_control7_y))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
