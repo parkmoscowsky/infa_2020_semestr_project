@@ -5,4 +5,4 @@ sp_up = 0
 global_point = 1504
 heal_weapon = 1
 music_volume = 40
-sound_volume = 25
+sound_volume = 65

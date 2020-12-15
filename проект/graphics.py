@@ -190,7 +190,7 @@ class Menu(pygame.sprite.Sprite):
                             370 < event.pos[1] < 420):
                         self.click_sound.play()
                         time.sleep(0.1)
-                        return(self.game_exit)
+                        self.save(self.upgrade)
                     
                     if (event.button == 1) and (230 < event.pos[0] < 580) and (
                             440 < event.pos[1] < 490):
