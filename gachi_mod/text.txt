@@ -1,8 +1,8 @@
-hp_up = 50.0
-mana_up = 50.0
-damage_up = 10.0
-sp_up = 5.0
-global_point = 1274.0
+hp_up = 0.0
+mana_up = 0.0
+damage_up = 40.0
+sp_up = 0.0
+global_point = 0.0
 heal_weapon = 1.0
-music_volume = 100.0
-sound_volume = 0.0
+music_volume = 35.0
+sound_volume = 80.0
