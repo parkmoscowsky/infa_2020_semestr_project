@@ -10,7 +10,6 @@ from weapon import Fireball, Heal_fire, Fire
 screen = set_dic['screen']
 
 
-
 def bar(coord_barx, coord_bary, bar_width, bar_height, back_color, 
         front_color, health, maxhealth, text):
     '''

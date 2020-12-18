@@ -4,7 +4,6 @@ from settings import set_sprite
 from settings import set_dic
 
 
-
 class Mob(pygame.sprite.Sprite):
     def __init__(self, set_dic):
         '''
@@ -21,7 +20,11 @@ class Mob(pygame.sprite.Sprite):
         '''
         pygame.sprite.Sprite.__init__(self)
         
+        # Достаем все нужные константы из словаря.
         self.gachi_mode_activate = set_dic['gachi_mode_activate']
+        self.HEIGHT = set_dic['HEIGHT']
+        self.WIDTH = set_dic['WIDTH']
+        self.BLACK = set_dic['BLACK']
         
         # Задаем папку, из которой будем брать спррайты.
         if self.gachi_mode_activate == 0:
@@ -36,17 +39,17 @@ class Mob(pygame.sprite.Sprite):
         
         # Создаем список со всеми картинками анимации моба.
         self.mob_animation = []
-        set_sprite(self.mob_animation, self.number, 'slime', set_dic['BLACK'],
+        set_sprite(self.mob_animation, self.number, 'slime', self.BLACK,
                    self.width, self.height, self.folder)
         self.image = self.mob_animation[0]
         self.rect = self.image.get_rect()
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
         if random.random() > 0.5:
-            self.rect.centerx = set_dic['WIDTH'] 
+            self.rect.centerx = self.WIDTH 
         else:
             self.rect.centerx = 0
-        self.rect.bottom = set_dic['HEIGHT'] - 37
+        self.rect.bottom = self.HEIGHT - 37
         self.speedx = 2
         self.damage = 5
         self.health = 20
@@ -116,7 +119,11 @@ class Gorilla(pygame.sprite.Sprite):
         '''
         pygame.sprite.Sprite.__init__(self)
         
+        # Достаем необходимые данные из словаря.
         self.gachi_mode_activate = set_dic['gachi_mode_activate']
+        self.HEIGHT = set_dic['HEIGHT']
+        self.WIDTH = set_dic['WIDTH']
+        self.WHITE = set_dic['WHITE']
         
         # Задаем папку, из которой будем брать спррайты.
         if self.gachi_mode_activate == 0:
@@ -132,21 +139,21 @@ class Gorilla(pygame.sprite.Sprite):
         
         # Создаем список со всеми картинками анимации моба.
         self.mob_animation = []
-        set_sprite(self.mob_animation, self.number_1, 'gorilla', set_dic['WHITE'],
-                   self.width, self.height, self.folder)
+        set_sprite(self.mob_animation, self.number_1, 'gorilla', 
+                   self.WHITE, self.width, self.height, self.folder)
         self.image = self.mob_animation[0]
         self.rect = self.image.get_rect()
         
         self.mob_animation_attack = []
         set_sprite(self.mob_animation_attack, self.number_2, 'gorilla_hit', 
-                   set_dic['WHITE'], self.width, self.height, self.folder)
+                   self.WHITE, self.width, self.height, self.folder)
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
         if random.random() > 0.5:
-            self.rect.centerx = set_dic['WIDTH'] 
+            self.rect.centerx = self.WIDTH 
         else:
             self.rect.centerx = 0 
-        self.rect.bottom = set_dic['HEIGHT'] - 37
+        self.rect.bottom = self.HEIGHT - 37
         self.speedx = 1
         self.damage = 50
         self.health = 100
@@ -198,7 +205,8 @@ class Gorilla(pygame.sprite.Sprite):
             self.timer(self.number_1, self.frame_rate_1)
             self.image = self.mob_animation[self.frame]
             
-        if player_coordinate + player_width <= self.rect.left <= player_coordinate + player_width + self.distance:
+        if player_coordinate + player_width <= self.rect.left <= (
+                player_coordinate + player_width + self.distance):
             if self.frame >= self.number_2:
                 self.frame = 0
             self.rect.x -= self.speedx
@@ -211,13 +219,14 @@ class Gorilla(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.mob_animation[self.frame],
                                                True, False)
             
-        if player_coordinate - self.distance <= self.rect.right <= player_coordinate:
+        if player_coordinate - self.distance <= self.rect.right <= (
+                player_coordinate):
             if self.frame >= self.number_2:
                 self.frame = 0
             self.rect.x += self.speedx
             self.timer(self.number_2, self.frame_rate_2)
-            self.image = pygame.transform.flip(self.mob_animation_attack[self.frame],
-                                               True, False)
+            self.image = pygame.transform.flip(
+                self.mob_animation_attack[self.frame], True, False)
             
 
 class Wolf(Gorilla):
@@ -245,18 +254,18 @@ class Wolf(Gorilla):
         
         # Создаем список со всеми картинками анимации моба.
         self.mob_animation = []
-        set_sprite(self.mob_animation, self.number_1, 'wolf', set_dic['WHITE'],
+        set_sprite(self.mob_animation, self.number_1, 'wolf', self.WHITE,
                    self.width, self.height, self.folder)
         self.image = self.mob_animation[0]
         self.rect = self.image.get_rect()
         
         self.mob_animation_attack = []
         set_sprite(self.mob_animation_attack, self.number_2, 'wolf_hit', 
-                   set_dic['WHITE'], self.width, self.height, self.folder)
+                   self.WHITE, self.width, self.height, self.folder)
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
-        self.rect.centerx = set_dic['WIDTH'] 
-        self.rect.bottom = set_dic['HEIGHT'] - 37
+        self.rect.centerx = self.WIDTH 
+        self.rect.bottom = self.HEIGHT - 37
         self.speedx = 3
         self.damage = 2
         self.health = 20
