@@ -46,7 +46,7 @@ class Mob(pygame.sprite.Sprite):
         self.damage = 5
         self.health = 20
         
-        # Переменные, отвечающие за частоту смены спрайтов игрока
+        # Переменные, отвечающие за частоту смены спрайтов моба
         # во время движения.
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
@@ -95,7 +95,7 @@ class Mob(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.mob_animation[self.frame],
                                                True, False)
             
-class Wolf(pygame.sprite.Sprite):
+class Gorilla(pygame.sprite.Sprite):
     def __init__(self, set_dic):
         '''
         Конструктор класса Mob
@@ -123,7 +123,7 @@ class Wolf(pygame.sprite.Sprite):
         self.width = 130    #110
         self.height = 120    #50
         self.number_1 = 6
-        self.number_2 = 3
+        self.number_2 = 6
         
         # Создаем список со всеми картинками анимации моба.
         self.mob_animation = []
@@ -133,19 +133,20 @@ class Wolf(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         self.mob_animation_attack = []
-        set_sprite(self.mob_animation_attack, self.number_2, 'wolf_attack', 
-                   set_dic['BLACK'], self.width, self.height, self.folder)
+        set_sprite(self.mob_animation_attack, self.number_2, 'gorilla_hit', 
+                   set_dic['WHITE'], self.width, self.height, self.folder)
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
         self.rect.centerx = set_dic['WIDTH'] 
         self.rect.bottom = set_dic['HEIGHT'] - 37
         self.speedx = 1
-        self.damage = 5
-        self.health = 20
+        self.damage = 50
+        self.health = 100
         
+        # Расстояние, на котором срабатывает анимация атаки.
         self.distance = 20
         
-        # Переменные, отвечающие за частоту смены спрайтов игрока
+        # Переменные, отвечающие за частоту смены спрайтов моба
         # во время движения.
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
@@ -188,12 +189,12 @@ class Wolf(pygame.sprite.Sprite):
             self.timer(self.number_1)
             self.image = self.mob_animation[self.frame]
             
-        '''if player_coordinate + player_width <= self.rect.left < player_coordinate + player_width + self.distance:
+        if player_coordinate + player_width <= self.rect.left <= player_coordinate + player_width + self.distance:
             if self.frame >= self.number_2:
                 self.frame = 0
             self.rect.x -= self.speedx
             self.timer(self.number_2)
-            self.image = self.mob_animation_attack[self.frame]'''
+            self.image = self.mob_animation_attack[self.frame]
             
         if player_coordinate - self.distance >= self.rect.right:
             self.rect.x += self.speedx

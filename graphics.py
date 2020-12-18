@@ -146,19 +146,24 @@ class Menu(pygame.sprite.Sprite):
         self.rect.y = 0
         
         self.upgrade_sprite = []
-        set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 50, 50, self.folder)
+        set_sprite(self.upgrade_sprite, 5, 'upgrade', self.BLACK, 
+                   50, 50, self.folder)
         
         self.options_sprite1 = []
-        set_sprite(self.options_sprite1, 1, 'sound_up', color, 50, 50, self.folder)
+        set_sprite(self.options_sprite1, 1, 'sound_up', color, 
+                   50, 50, self.folder)
         
         self.options_sprite2 = []
-        set_sprite(self.options_sprite2, 2, 'options_sprite', self.BLACK, 120, 50, self.folder)
+        set_sprite(self.options_sprite2, 2, 'options_sprite', self.BLACK, 
+                   120, 50, self.folder)
         
         self.fire_help_sprite = []
-        set_sprite(self.fire_help_sprite, 1, 'fire_help', self.BLACK, 50, 50, self.folder)
+        set_sprite(self.fire_help_sprite, 1, 'fire_help', self.BLACK, 
+                   50, 50, self.folder)
         
         self.help_sprite = []
-        set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 100, 140, self.folder)
+        set_sprite(self.help_sprite, 1, 'front_wizard', self.BLACK, 
+                   100, 140, self.folder)
         
         # Переменная, отвечающая за громкость музыки.
         self.upgrade = self.load_data()
@@ -541,9 +546,13 @@ class Menu(pygame.sprite.Sprite):
             t_4 = f.render('Громкости звуков ' + str(self.sound_volume) + 
                            ' %', True, self.BLACK)
             if self.gachi_mode_activate == 0:
-                t_5 = f.render('Переключение в режим гачи мод. Для активации необходимо перезагрузить игру.', True, self.BLACK)
+                t_5 = f.render('Переключение в режим гачи мод. Для активации '
+                               'необходимо перезагрузить игру.', 
+                               True, self.BLACK)
             else:
-                t_5 = f.render('Переключение в обычный режим. Для активации необходимо перезагрузить игру.', True, self.BLACK)
+                t_5 = f.render('Переключение в обычный режим. Для активации '
+                               'необходимо перезагрузить игру.',
+                               True, self.BLACK)
             
             # Вывоим текст на экран.
             self.screen.blit(t_1, (text1_x, text1_y))

@@ -6,7 +6,7 @@ from graphics import bar
 from graphics import Health
 from settings import set_dic, snd_dic, load_status
 from weapon import Fire, Fireball, Heal_fire
-from mobs import Mob
+from mobs import Mob, Gorilla
 from player import Player
 
 
@@ -74,7 +74,7 @@ while not global_game:
     
     # Создаем объекты классов Player, Mob. Fireball, Fire, Heal_fire, Health.
     player = Player(upgrade, set_dic, snd_dic)
-    mob = Mob(set_dic)
+    mob = Gorilla(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
     heal_fire = Heal_fire(1, 2, 3, 4, 5, set_dic, 0)
