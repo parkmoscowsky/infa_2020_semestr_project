@@ -6,7 +6,7 @@ from graphics import bar
 from graphics import Health
 from settings import set_dic, snd_dic, load_status
 from weapon import Fire, Fireball, Heal_fire
-from mobs import Mob, Gorilla
+from mobs import Mob, Gorilla, Wolf
 from player import Player
 
 
@@ -74,7 +74,7 @@ while not global_game:
     
     # Создаем объекты классов Player, Mob. Fireball, Fire, Heal_fire, Health.
     player = Player(upgrade, set_dic, snd_dic)
-    mob = Gorilla(set_dic)
+    mob = Mob(set_dic)
     fireball = Fireball(1, 2, 3, 4, 5, set_dic, upgrade[2])
     fire = Fire((1, 2), set_dic)
     heal_fire = Heal_fire(1, 2, 3, 4, 5, set_dic, 0)
@@ -140,8 +140,16 @@ while not global_game:
                 mob.kill()
                 player.point += 1
                 upgrade[4] += 1
-                mob = Mob(set_dic)
-                mob_sprites.add(mob)
+                if player.point < 20:
+                    if player.point % 3 == 0:
+                        mob = Wolf(set_dic)
+                        mob_sprites.add(mob)
+                    else:
+                        mob = Mob(set_dic)
+                        mob_sprites.add(mob)
+                else:
+                    mob = Gorilla(set_dic)
+                    mob_sprites.add(mob)
         
         if pygame.sprite.groupcollide(mob_sprites, player.fireballs_sprites, 
                                       False, True):
@@ -157,8 +165,16 @@ while not global_game:
                 mob.kill()
                 player.point += 1
                 upgrade[4] += 1
-                mob = Mob(set_dic)
-                mob_sprites.add(mob)
+                if player.point < 20:
+                    if player.point % 3 == 0:
+                        mob = Wolf(set_dic)
+                        mob_sprites.add(mob)
+                    else:
+                        mob = Mob(set_dic)
+                        mob_sprites.add(mob)
+                else:
+                    mob = Gorilla(set_dic)
+                    mob_sprites.add(mob)
                
         if pygame.sprite.groupcollide(mob_sprites, player.heal_fire_sprites, 
                                       False, True):
@@ -174,8 +190,16 @@ while not global_game:
                 mob.kill()
                 player.point += 1
                 upgrade[4] += 1
-                mob = Mob(set_dic)
-                mob_sprites.add(mob)
+                if player.point < 20:
+                    if player.point % 3 == 0:
+                        mob = Wolf(set_dic)
+                        mob_sprites.add(mob)
+                    else:
+                        mob = Mob(set_dic)
+                        mob_sprites.add(mob)
+                else:
+                    mob = Gorilla(set_dic)
+                    mob_sprites.add(mob)
              
             if player.health < player.maxhealth:    
                 player.health += heal_fire.heal
