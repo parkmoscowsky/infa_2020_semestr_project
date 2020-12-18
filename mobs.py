@@ -1,6 +1,8 @@
 import pygame
+import random
 from settings import set_sprite
 from settings import set_dic
+
 
 
 class Mob(pygame.sprite.Sprite):
@@ -40,7 +42,10 @@ class Mob(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
-        self.rect.centerx = set_dic['WIDTH'] 
+        if random.random() > 0.5:
+            self.rect.centerx = set_dic['WIDTH'] 
+        else:
+            self.rect.centerx = 0
         self.rect.bottom = set_dic['HEIGHT'] - 37
         self.speedx = 2
         self.damage = 5
@@ -137,7 +142,10 @@ class Gorilla(pygame.sprite.Sprite):
                    set_dic['WHITE'], self.width, self.height, self.folder)
         
         # Задаем изначальные коорднаты моба, его скорость, урон и здоровье.
-        self.rect.centerx = set_dic['WIDTH'] 
+        if random.random() > 0.5:
+            self.rect.centerx = set_dic['WIDTH'] 
+        else:
+            self.rect.centerx = 0 
         self.rect.bottom = set_dic['HEIGHT'] - 37
         self.speedx = 1
         self.damage = 50

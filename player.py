@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         
         # Задаем начальные координаты игрока, скорость перемещения и прыжка,
         # значение ускорения свободного падения и изначальный вид оружия.
-        self.rect.centerx = self.WIDTH / 4
+        self.rect.centerx = self.WIDTH / 2
         self.rect.bottom = self.HEIGHT - self.blocksize
         self.speedx = 0
         self.speedy = 0
